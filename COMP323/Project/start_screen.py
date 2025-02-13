@@ -46,17 +46,11 @@ def game():
         an_list.append(sprite_sheet.get_sprite(x, 32, 45, 3, black))
 
 
-    #frame_1 = get_sprite(sprite, 1, 30, 35, 3, black)
-    #frame_2 = get_sprite(sprite, 2, 30, 35, 3, black)
-
     run = True
     while run:
         canvas.fill(black)
         
         canvas.blit(an_list[frame], (x, y))
-
-        #canvas.blit(frame_1, (0,0))
-        #canvas.blit(frame_2, (30,70))
 
         keys = pygame.key.get_pressed()
 
