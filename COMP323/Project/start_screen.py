@@ -52,18 +52,19 @@ def game():
         
         canvas.blit(an_list[frame], (x, y))
 
-        keys = pygame.key.get_pressed()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
+        keys = pygame.key.get_pressed()
+
         if keys[pygame.K_LEFT] and x > 0:
             x -= 0.5
             
         if keys[pygame.K_RIGHT] and x < width - sprite_width:
-            frame += 1
+            #frame += 1
             x += 0.5
 
         if keys[pygame.K_UP] and y > 0:
@@ -75,9 +76,6 @@ def game():
     
 
         #pygame.draw.rect(canvas, rect_color, pygame.Rect(x,y,rec_width,rec_height))
-       
-        
-
 
         pygame.display.update()
 
