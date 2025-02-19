@@ -41,6 +41,8 @@ def game():
     an_list = []
     an_steps = 10
     frame = 0
+    frame_delay = 5
+    frame_counter = 0
 
     for x in range (an_steps):
         an_list.append(sprite_sheet.get_sprite(x, 32, 45, 3, black))
@@ -59,6 +61,7 @@ def game():
                 sys.exit()
 
         keys = pygame.key.get_pressed()
+        moving = False
 
         if keys[pygame.K_LEFT] and x > 0:
             x -= 0.5
@@ -66,14 +69,21 @@ def game():
         if keys[pygame.K_RIGHT] and x < width - sprite_width:
             #frame += 1
             x += 0.5
+            moving = True
 
         if keys[pygame.K_UP] and y > 0:
             y -= 0.5
-        
+            moving = True
         if keys[pygame.K_DOWN] and y < height - sprite_height:
             y += 0.5
+            moving = True
 
-    
+        if moving:
+            frame_counter += 1
+        if frame_counter >= frame_delay:
+            if frame_counter >= frame_delay:
+                frame = (frame + 1) % an_steps 
+                frame_counter = 0
 
         #pygame.draw.rect(canvas, rect_color, pygame.Rect(x,y,rec_width,rec_height))
 
