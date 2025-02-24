@@ -32,7 +32,7 @@ def game():
     sprite_width = 150
     sprite_height = 170
 
-    
+    #Creates sprite from spritesheet
     sprite = pygame.image.load('skeleton.png').convert_alpha()
     sprite_sheet = spritesheet.SpriteSheet(sprite)
 
@@ -41,7 +41,7 @@ def game():
     an_list = []
     an_steps = 10
     frame = 0
-    frame_delay = 5
+    frame_delay = 20
     frame_counter = 0
 
     for x in range (an_steps):
@@ -52,6 +52,7 @@ def game():
     while run:
         canvas.fill(black)
         
+        #draws sprite on screen
         canvas.blit(an_list[frame], (x, y))
 
 
@@ -60,6 +61,7 @@ def game():
                 pygame.quit()
                 sys.exit()
 
+        #up, down, left, right keys move sprite in given direction
         keys = pygame.key.get_pressed()
         moving = False
 
@@ -67,7 +69,6 @@ def game():
             x -= 0.5
             
         if keys[pygame.K_RIGHT] and x < width - sprite_width:
-            #frame += 1
             x += 0.5
             moving = True
 
@@ -78,14 +79,13 @@ def game():
             y += 0.5
             moving = True
 
+        #animates sprite movements/ cycles through frames
         if moving:
             frame_counter += 1
         if frame_counter >= frame_delay:
             if frame_counter >= frame_delay:
                 frame = (frame + 1) % an_steps 
                 frame_counter = 0
-
-        #pygame.draw.rect(canvas, rect_color, pygame.Rect(x,y,rec_width,rec_height))
 
         pygame.display.update()
 
@@ -97,9 +97,6 @@ def Start_screen():
     exit = font.render('exit', True, white)
     begin = font.render('begin', True, white)
     title = font.render("Game Title", True, white)
-    #textRect = pygame.Rect(525,550,150,90)
-    #textRect.center = (550,550)
-
 
 
     while True: 
@@ -107,18 +104,22 @@ def Start_screen():
             if event.type == pygame.QUIT: 
                 pygame.quit()
                 sys.exit()
+
             if event.type == pygame.MOUSEBUTTONDOWN:
+                #if exit is clicked page exits
                 if width/4 <= mouse[0] <= width/4 + 200 and height/2 + 100 <= mouse[1] <= height/2+200: 
                     pygame.quit()
-                    sys.ecit()
+                    sys.exit()
+                #if begin button is clicked game begins 
                 if width/2 <= mouse[0] <= width/2 + 300 and height/2 + 100 <= mouse[1] <= height/2+200:
                     game()
+                    
         canvas.fill(black)
      
 
         mouse = pygame.mouse.get_pos()
 
-
+        #buttons are black, when hovered over they are drawn white
         if width/4 <= mouse[0] <= width/4+200 and height/2 + 25 <= mouse[1] <= height/2+ 225: 
             pygame.draw.rect(canvas,light,[width/4 + 60, height/2 + 100, 150, 90])
         else:
@@ -129,6 +130,7 @@ def Start_screen():
             else:
                 pygame.draw.rect(canvas, black, [width/4 + 170 , height/2 + 100, 150, 90]) 
      
+        #puts the title, exit button, and begin button
         canvas.blit(exit, (width/4+100, height/2 + 125))
         canvas.blit(begin, (width/2+200, height/2 + 125))
         canvas.blit(title, (width/2 - 50, height/4))
