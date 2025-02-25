@@ -8,7 +8,6 @@ pygame.init()
 black = (0,0,0)
 white = (255,255,255)
 light = (192,192,192)
-rect_color = (255,0,0)
 
 
 
@@ -113,7 +112,7 @@ def Start_screen():
                 #if begin button is clicked game begins 
                 if width/2 <= mouse[0] <= width/2 + 300 and height/2 + 100 <= mouse[1] <= height/2+200:
                     game()
-                    
+
         canvas.fill(black)
      
 
