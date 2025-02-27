@@ -24,6 +24,7 @@ class Game:
         
         font = pygame.font.Font('freesansbold.ttf', 32)
         fontTitle = pygame.font.Font('freesansbold.ttf', 62)
+
         exit = font.render('exit', True, white)
         begin = font.render('begin', True, white)
         title = fontTitle.render("NOVA", True, white)
@@ -56,7 +57,7 @@ class Game:
                         self.game_loop()
 
 
-        #buttons are black, when hovered over they are drawn white
+        #buttons are drawn white when hovered over
             if exit_button.collidepoint(mouse):
                 pygame.draw.rect(self.screen,light, exit_button)
         
@@ -64,7 +65,7 @@ class Game:
                 pygame.draw.rect(self.screen,light, begin_button)
 
 
-        #puts the title, exit button, and begin button
+        #adds the title, exit, and begin text
             self.screen.blit(exit, (width/4+100, height/2 + 125))
             self.screen.blit(begin, (width/2+200, height/2 + 125))
             self.screen.blit(title, (width/2 - 50, height/4))
@@ -85,16 +86,21 @@ class Game:
 
         #animation list
         an_list = []
+        #left and right facing animations
         an_steps = [10,10]
+        #tracks sprite action on spritesheet
         action = 0
         frame = 0
         frame_delay = 20
         frame_counter = 0
         step_counter = 0
 
+        #runs through animation steps
         for animation in an_steps:
+            #cycles through an_steps list appending to temp and back in order to loop through all animations
             temp_list = []
             for _ in range (animation):
+                #sets frame to step_counter, width = 32, height = 45, scale = 3, color = black
                 temp_list.append(sprite_sheet.get_sprite(step_counter, 32, 45, 3, black))
                 step_counter += 1
             an_list.append(temp_list)
@@ -111,17 +117,19 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-        #up, down, left, right keys move sprite in given direction
+            #up, down, left, right keys move sprite in given direction
             keys = pygame.key.get_pressed()
             moving = False
 
             if keys[pygame.K_LEFT] and x > 0:
                 x -= 2
+                #while moving left second set of animations in an_list used
                 action = 1
                 moving = True
 
             elif keys[pygame.K_RIGHT] and x < width - sprite_width:
                 x += 2
+                #while moving right first set of animations in an_list used
                 action = 0
                 moving = True
             else:

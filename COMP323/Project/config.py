@@ -8,7 +8,7 @@ white = (255,255,255)
 light = (192,192,192)
 
 # TITLE OF CANVAS 
-pygame.display.set_caption("Alien Game")
+pygame.display.set_caption("Nova")
 
 width = 1200 
     

@@ -16,6 +16,7 @@ class SpriteSheet():
 
         return image
 
+
 class Block(pygame.sprite.Sprite): #tile map
     def __init__(self, game, x, y):
         self.game = game
