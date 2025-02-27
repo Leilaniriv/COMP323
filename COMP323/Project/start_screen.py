@@ -154,7 +154,7 @@ class Game:
         #draws sprite on screen
             self.screen.blit(an_list[action][frame], (x, y))
             pygame.display.update()
-            self.clock.tick(60)
+            self.clock.tick(90)
 
 
 if __name__ == "__main__":
