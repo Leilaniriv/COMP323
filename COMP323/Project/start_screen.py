@@ -39,6 +39,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                 #if exit is clicked page exits
                     if exit_button.collidepoint(mouse):
@@ -46,20 +47,18 @@ class Game:
                         sys.exit()
                 #if begin button is clicked game begins
                     if begin_button.collidepoint(mouse):
-                        running = False
+                        #running = False
                         self.game_loop()
 
 
         #buttons are black, when hovered over they are drawn white
             if exit_button.collidepoint(mouse):
                 pygame.draw.rect(self.screen,light, exit_button)
-            else:
-                pygame.draw.rect(self.screen, black, exit_button)
         
             if begin_button.collidepoint(mouse):
                 pygame.draw.rect(self.screen,light, begin_button)
-            else:
-                pygame.draw.rect(self.screen, black, begin_button) 
+
+
         #puts the title, exit button, and begin button
             self.screen.blit(exit, (width/4+100, height/2 + 125))
             self.screen.blit(begin, (width/2+200, height/2 + 125))
@@ -76,18 +75,24 @@ class Game:
         
 
         #Creates sprite from spritesheet
-        sprite = pygame.image.load('skeleton.png').convert_alpha()
+        sprite = pygame.image.load('skeletons.png').convert_alpha()
         sprite_sheet = SpriteSheet(sprite)
 
         #animation list
         an_list = []
-        an_steps = 10
+        an_steps = [10,10]
+        action = 0
         frame = 0
         frame_delay = 20
         frame_counter = 0
+        step_counter = 0
 
-        for i in range (an_steps):
-            an_list.append(sprite_sheet.get_sprite(i, 32, 45, 3, black))
+        for animation in an_steps:
+            temp_list = []
+            for _ in range (animation):
+                temp_list.append(sprite_sheet.get_sprite(step_counter, 32, 45, 3, black))
+                step_counter += 1
+            an_list.append(temp_list)
 
         
         run = True
@@ -107,15 +112,20 @@ class Game:
 
             if keys[pygame.K_LEFT] and x > 0:
                 x -= 2
+                action = 1
                 moving = True
 
-            if keys[pygame.K_RIGHT] and x < width - sprite_width:
+            elif keys[pygame.K_RIGHT] and x < width - sprite_width:
                 x += 2
+                action = 0
                 moving = True
+            else:
+                frame = 0
 
             if keys[pygame.K_UP] and y > 0:
                 y -= 2
                 moving = True
+
             if keys[pygame.K_DOWN] and y < height - sprite_height:
                 y += 2
                 moving = True
@@ -125,10 +135,11 @@ class Game:
                 frame_counter += 1
         
             if frame_counter >= frame_delay:
-                frame = (frame + 1) % an_steps
+                frame = (frame + 1) % len(an_list[action]) 
                 frame_counter = 0
+
         #draws sprite on screen
-            self.screen.blit(an_list[frame], (x, y))
+            self.screen.blit(an_list[action][frame], (x, y))
             pygame.display.update()
             self.clock.tick(60)
 
