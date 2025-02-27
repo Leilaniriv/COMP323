@@ -29,8 +29,8 @@ class Game:
         begin = font.render('begin', True, white)
         title = fontTitle.render("NOVA", True, white)
 
-        exit_button = pygame.Rect(width/4 + 60, height/2 + 100, 150, 90)
-        begin_button = pygame.Rect(width/2 + 170, height/2 + 100,150,90)
+        exit_button = pygame.Rect(width/4 - 45, height/2 + 100, 150, 90)
+        begin_button = pygame.Rect(width/2 + 270, height/2 + 100,150,90)
 
         running = True
         while running:
@@ -66,9 +66,9 @@ class Game:
 
 
         #adds the title, exit, and begin text
-            self.screen.blit(exit, (width/4+100, height/2 + 125))
-            self.screen.blit(begin, (width/2+200, height/2 + 125))
-            self.screen.blit(title, (width/2 - 50, height/4))
+            self.screen.blit(exit, (width/4, height/2 + 125))
+            self.screen.blit(begin, (width/2 + 300, height/2 + 125))
+            self.screen.blit(title, (width/2 -50, height/4))
             
             pygame.display.update()
             self.clock.tick(60)
