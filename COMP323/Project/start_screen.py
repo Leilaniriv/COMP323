@@ -23,16 +23,21 @@ class Game:
     def Start_screen(self):
         
         font = pygame.font.Font('freesansbold.ttf', 32)
+        fontTitle = pygame.font.Font('freesansbold.ttf', 62)
         exit = font.render('exit', True, white)
         begin = font.render('begin', True, white)
-        title = font.render("NOVA", True, white)
+        title = fontTitle.render("NOVA", True, white)
 
         exit_button = pygame.Rect(width/4 + 60, height/2 + 100, 150, 90)
         begin_button = pygame.Rect(width/2 + 170, height/2 + 100,150,90)
 
         running = True
         while running:
-            self.screen.fill(black)
+            bg_image = pygame.image.load('startscreen.png').convert_alpha()
+            bg_image = pygame.transform.scale(bg_image,(1200,750))
+            bg_rect = bg_image.get_rect()
+            self.screen.blit(bg_image, bg_rect)
+            #self.screen.fill(black)
             mouse = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
