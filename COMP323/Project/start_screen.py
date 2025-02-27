@@ -34,7 +34,7 @@ class Game:
 
         running = True
         while running:
-            bg_image = pygame.image.load('startscreen.png').convert_alpha()
+            bg_image = pygame.image.load('nightsky.jpg').convert_alpha()
             bg_image = pygame.transform.scale(bg_image,(1200,750))
             bg_rect = bg_image.get_rect()
             self.screen.blit(bg_image, bg_rect)
