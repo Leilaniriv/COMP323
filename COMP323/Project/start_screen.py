@@ -4,6 +4,8 @@ import sys
 from pygame.locals import *
 from config import *
 
+
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -18,7 +20,7 @@ class Game:
                     Block(self ,j, i)
                 #if column = 'P': //for player
                     #Block()
-                
+      
 
     def Start_screen(self):
         
@@ -75,7 +77,7 @@ class Game:
 
     def game_loop(self):
         x = 500
-        y = 550
+        y = 400
         sprite_width = 32
         sprite_height = 32
         
@@ -108,7 +110,26 @@ class Game:
         
         run = True
         while run:
-            self.screen.fill(black)
+            mouse = pygame.mouse.get_pos()
+
+            font = pygame.font.Font('freesansbold.ttf', 18)
+
+            background = pygame.image.load('desert_background.jpeg').convert_alpha()
+            background = pygame.transform.scale(background,(1200,750))
+            self.screen.blit(background, (0,0))
+
+            #add carnival sign eventually
+            carnival_sign = pygame.Rect(width/2 + 300, height/2 - 50, 150, 90)
+            pygame.draw.rect(self.screen,black, carnival_sign)
+
+            optionbar = pygame.Rect(width/4, height / 2 + 200, 600, 100)
+
+            prompt = font.render('Would you like to visit the Carnival?', True, white)
+
+            option1 = font.render('Yes', True, white)
+            option2 = font.render('No', True, white)
+
+
             
         
             for event in pygame.event.get():
@@ -117,17 +138,34 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+        
+                if event.type == MOUSEBUTTONDOWN:
+                    if carnival_sign.collidepoint(mouse):
+                        pygame.draw.rect(self.screen, black, optionbar)
+                        self.screen.blit(prompt, (width/4 + 110, height/2 + 220))
+                        self.screen.blit(option1, (width/4 + 150 , height/2 + 250))
+                        self.screen.blit(option2, (width/4 + 400, height/2 + 250))
+                        pygame.display.update()
+                        self.clock.tick(60)
+
+                #pygame.display.update()
+  
+                        
+
+
+
+
             #up, down, left, right keys move sprite in given direction
             keys = pygame.key.get_pressed()
             moving = False
 
-            if keys[pygame.K_LEFT] and x > 0:
+            if keys[pygame.K_a] and x > width/4:
                 x -= 2
                 #while moving left second set of animations in an_list used
                 action = 1
                 moving = True
 
-            elif keys[pygame.K_RIGHT] and x < width - sprite_width:
+            elif keys[pygame.K_d] and x < width - sprite_width:
                 x += 2
                 #while moving right first set of animations in an_list used
                 action = 0
@@ -135,11 +173,11 @@ class Game:
             else:
                 frame = 0
 
-            if keys[pygame.K_UP] and y > 0:
+            if keys[pygame.K_w] and y > height/2:
                 y -= 2
                 moving = True
 
-            if keys[pygame.K_DOWN] and y < height - sprite_height:
+            if keys[pygame.K_s] and y < height /2 + 200:
                 y += 2
                 moving = True
 
