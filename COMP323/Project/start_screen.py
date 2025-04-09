@@ -3,6 +3,7 @@ from spritesheet import *
 import sys
 from pygame.locals import *
 from config import *
+from prologue import run_prologue
 
 
 
@@ -55,8 +56,10 @@ class Game:
                         sys.exit()
                 #if begin button is clicked game begins
                     if begin_button.collidepoint(mouse):
-                        #running = False
+                        pygame.time.wait(500)
+                        run_prologue(self.screen)
                         self.game_loop()
+                        running = False
 
 
         #buttons are drawn white when hovered over
@@ -83,7 +86,7 @@ class Game:
         
 
         #Creates sprite from spritesheet
-        sprite = pygame.image.load('skeletons.png').convert_alpha()
+        sprite = pygame.image.load('aliens.png').convert_alpha()
         sprite_sheet = SpriteSheet(sprite)
 
         #animation list
