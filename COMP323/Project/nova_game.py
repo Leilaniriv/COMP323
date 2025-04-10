@@ -173,7 +173,7 @@ class NPC(pygame.sprite.Sprite):
 game_sprites = pygame.sprite.Group()
 player = Player()
 game_sprites.add(player)
-sally = NPC()
+sally = NPC(100,100)
 game_sprites.add(sally)
 
 class Game:
