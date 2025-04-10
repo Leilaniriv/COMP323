@@ -128,6 +128,26 @@ class Block(pygame.sprite.Sprite): #tile map
         self.rect.x = self.x
         self.rect.y = self.y
 
+class Projectile(pygame.sprite.Sprite):
+
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((5,10))
+        self.image.fill(255, 0, 0)
+        self.rect = self.image.get_rect()
+        #weapon fired from front (top) of player sprite...
+        self.rect.bottom = y
+        self.rect.centerx = x
+        #speed of projectile up the screen 
+        self.speed_y = -10
+    
+    def update(self):
+        #update y relative to speed of projectile on y-axis
+        self.rect.y += self.speed_y
+        #remove from game window - if it goes beyond bounding for y-axis at top...
+        if self.rect.bottom < 0:
+            self.kill()
+
 game_sprites = pygame.sprite.Group()
 player = Player()
 game_sprites.add(player)
