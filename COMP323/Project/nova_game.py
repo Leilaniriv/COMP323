@@ -1,4 +1,3 @@
-
 """
 GAME NAME: NOVA
 
@@ -101,19 +100,6 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom > height:
             self.rect.bottom = height
 
-class SpriteSheet():
-    def __init__(self, image):
-        self.sheet = image
-
-    def get_sprite(self, frame, width, height, scale, color):
-        image = pygame.Surface((width, height)).convert_alpha()
-        image.blit(self.sheet, (0,0), ((frame * width), 0, width, height))
-        image = pygame.transform.scale(image, (width * scale, height * scale))
-        image.set_colorkey(color)
-
-        return image
-
-
 class Block(pygame.sprite.Sprite): #tile map
     def __init__(self, game, x, y):
         self.game = game
@@ -158,7 +144,7 @@ class NPC(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((30,30))
-        self.image.fill((255, 0, 0))
+        self.image.fill((0, 255, 0))
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
@@ -174,19 +160,19 @@ class NPC(pygame.sprite.Sprite):
         if self.rect.bottom > height or self.rect.top < 0:
             self.speed_y = -self.speed_y
 
-
 game_sprites = pygame.sprite.Group()
 player = Player()
 game_sprites.add(player)
-sally = NPC(100,100)
+sally = NPC(100, 100)
 game_sprites.add(sally)
 
 class Game:
+
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((width,height))
         self.clock = pygame.time.Clock()
-
+    
     def Start_screen(self):
         
         font = pygame.font.Font('freesansbold.ttf', 32)
@@ -243,21 +229,84 @@ class Game:
             self.clock.tick(60)
 
 
-    def gameLoop():
+    def game_loop(self):
+        x = 500
+        y = 400
+        sprite_width = 32
+        sprite_height = 32
+
+        #Creates sprite from spritesheet
+        sprite = pygame.image.load('aliens.png').convert_alpha()
+        sprite_sheet = SpriteSheet(sprite)
+
+        #animation list
+        an_list = []
+        #left and right facing animations
+        an_steps = [10,10]
+        #tracks sprite action on spritesheet
+        action = 0
+        frame = 0
+        frame_delay = 20
+        frame_counter = 0
+        step_counter = 0
+
+        #runs through animation steps
+        for animation in an_steps:
+            #cycles through an_steps list appending to temp and back in order to loop through all animations
+            temp_list = []
+            for _ in range (animation):
+                #sets frame to step_counter, width = 32, height = 45, scale = 3, color = black
+                temp_list.append(sprite_sheet.get_sprite(step_counter, 32, 45, 3, black))
+                step_counter += 1
+            an_list.append(temp_list)
+
+
         running = True
         while running:
+
+            mouse = pygame.mouse.get_pos()
+
+            font = pygame.font.Font('freesansbold.ttf', 18)
+
+            background = pygame.image.load('desert_background.jpeg').convert_alpha()
+            background = pygame.transform.scale(background,(1200,750))
+            self.screen.blit(background, (0,0))
+
+            #add carnival sign eventually
+            carnival_sign = pygame.Rect(width/2 + 300, height/2 - 50, 150, 90)
+            pygame.draw.rect(self.screen,black, carnival_sign)
+
+            optionbar = pygame.Rect(width/4, height / 2 + 200, 600, 100)
+
+            prompt = font.render('Would you like to visit the Carnival?', True, white)
+
+            option1 = font.render('Yes', True, white)
+            option2 = font.render('No', True, white)
+
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
+                        running = False
                         pygame.quit()
                         sys.exit()
-        
-            screen.fill(white)
-            game_sprites.draw(screen)
-            pygame.display.flip()
+            
 
+                if event.type == MOUSEBUTTONDOWN:
+                    if carnival_sign.collidepoint(mouse):
+                        pygame.draw.rect(self.screen, black, optionbar)
+                        self.screen.blit(prompt, (width/4 + 110, height/2 + 220))
+                        self.screen.blit(option1, (width/4 + 150 , height/2 + 250))
+                        self.screen.blit(option2, (width/4 + 400, height/2 + 250))
+                        pygame.display.update()
+                        self.clock.tick(60)
+
+            self.screen.blit(an_list[action][frame], (x, y))
+            pygame.display.update()
+            self.clock.tick(90)
             player.update()
             sally.update()
 
-Game.gameLoop()
+game = Game()
+game.Start_screen()
+game.game_loop()
 pygame.quit()
