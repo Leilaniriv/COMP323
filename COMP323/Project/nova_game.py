@@ -187,6 +187,62 @@ class Game:
         self.screen = pygame.display.set_mode((width,height))
         self.clock = pygame.time.Clock()
 
+    def Start_screen(self):
+        
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        fontTitle = pygame.font.Font('freesansbold.ttf', 62)
+
+        exit = font.render('exit', True, white)
+        begin = font.render('begin', True, white)
+        title = fontTitle.render("NOVA", True, white)
+
+        exit_button = pygame.Rect(width/4 - 45, height/2 + 100, 150, 90)
+        begin_button = pygame.Rect(width/2 + 270, height/2 + 100,150,90)
+
+        running = True
+        while running:
+            bg_image = pygame.image.load('nightsky.jpg').convert_alpha()
+            bg_image = pygame.transform.scale(bg_image,(1200,750))
+            bg_rect = bg_image.get_rect()
+            self.screen.blit(bg_image, bg_rect)
+            #self.screen.fill(black)
+            mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                #if exit is clicked page exits
+                    if exit_button.collidepoint(mouse):
+                        pygame.quit()
+                        sys.exit()
+                #if begin button is clicked game begins
+                    if begin_button.collidepoint(mouse):
+                        pygame.time.wait(500)
+                        run_prologue(self.screen)
+                        self.game_loop()
+                        running = False
+
+
+        #buttons are drawn white when hovered over
+            if exit_button.collidepoint(mouse):
+                pygame.draw.rect(self.screen,light, exit_button)
+        
+            if begin_button.collidepoint(mouse):
+                pygame.draw.rect(self.screen,light, begin_button)
+
+
+        #adds the title, exit, and begin text
+            self.screen.blit(exit, (width/4, height/2 + 125))
+            self.screen.blit(begin, (width/2 + 300, height/2 + 125))
+            self.screen.blit(title, (width/2 -50, height/4))
+            
+            pygame.display.update()
+            self.clock.tick(60)
+
+
     def gameLoop():
         running = True
         while running:
