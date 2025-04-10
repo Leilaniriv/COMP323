@@ -29,7 +29,7 @@ from spritesheet import *
 import sys
 from pygame.locals import *
 from config import *
-from prologue import run_prologueimport 
+from prologue import run_prologue
 
 black = (0,0,0)
 white = (255,255,255)
