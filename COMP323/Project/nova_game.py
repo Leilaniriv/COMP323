@@ -24,7 +24,12 @@ Game structure:
 -Projectile class: 
 -Level Manager:
 """
-import pygame, sys, os
+import pygame
+from spritesheet import *
+import sys
+from pygame.locals import *
+from config import *
+from prologue import run_prologueimport 
 
 black = (0,0,0)
 white = (255,255,255)
