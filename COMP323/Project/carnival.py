@@ -35,7 +35,7 @@ class Carnival:
             temp_list = []
             for _ in range (animation):
                 #sets frame to step_counter, width = 32, height = 45, scale = 3, color = black
-                temp_list.append(sprite_sheet.get_sprite(step_counter, 26, 45, 1.75, black))
+                temp_list.append(sprite_sheet.get_sprite(step_counter, 32, 45, 2, black))
                 step_counter += 1
             an_list.append(temp_list)
 
