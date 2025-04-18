@@ -4,6 +4,7 @@ import sys
 from pygame.locals import *
 from config import *
 from prologue import run_prologue
+from carnival import Carnival
 
 
 
@@ -21,7 +22,47 @@ class Game:
                     Block(self ,j, i)
                 #if column = 'P': //for player
                     #Block()
-      
+    
+    def carnival_prompt(self):
+        mouse = pygame.mouse.get_pos()
+        font = pygame.font.Font('freesansbold.ttf', 18)
+        
+        optionbar = pygame.Rect(width/4, height / 2 + 200, 600, 100)
+
+        prompt = font.render('Would you like to visit the Carnival?', True, white)
+
+        option1 = font.render('Yes', True, white)
+        option1_button = pygame.Rect(width/4 + 138, height / 2 + 240, 60, 40)
+
+        option2 = font.render('No', True, white)
+        option2_button = pygame.Rect(width/4 + 380, height / 2 + 240, 60, 40)
+
+
+        pygame.draw.rect(self.screen, black, optionbar)
+
+        self.screen.blit(prompt, (width/4 + 110, height/2 + 220))
+
+        pygame.draw.rect(self.screen, light, option1_button)
+        self.screen.blit(option1, (width/4 + 150 , height/2 + 250))
+        
+
+        pygame.draw.rect(self.screen, light, option2_button)
+        self.screen.blit(option2, (width/4 + 400, height/2 + 250))
+        
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            if event.type == MOUSEBUTTONDOWN:
+                if option1_button.collidepoint(mouse):
+                    #change to carnival scene
+                    Carnival.carnival_scene(self)
+
+                if option2_button.collidepoint(mouse):
+                    pygame.quit()
+                    sys.exit()
 
     def Start_screen(self):
         
@@ -57,7 +98,7 @@ class Game:
                 #if begin button is clicked game begins
                     if begin_button.collidepoint(mouse):
                         pygame.time.wait(500)
-                        run_prologue(self.screen)
+                        #run_prologue(self.screen)
                         self.game_loop()
                         running = False
 
@@ -109,6 +150,9 @@ class Game:
                 temp_list.append(sprite_sheet.get_sprite(step_counter, 32, 45, 3, black))
                 step_counter += 1
             an_list.append(temp_list)
+        
+        sign_clicked = False
+        show_prompt = False
 
         
         run = True
@@ -127,13 +171,13 @@ class Game:
 
             optionbar = pygame.Rect(width/4, height / 2 + 200, 600, 100)
 
-            prompt = font.render('Would you like to visit the Carnival?', True, white)
+            if carnival_sign.collidepoint(mouse) and sign_clicked:
+                show_prompt = True
+                #if show_prompt:
+                    #self.carnival_prompt()
+            if show_prompt:
+                self.carnival_prompt()
 
-            option1 = font.render('Yes', True, white)
-            option2 = font.render('No', True, white)
-
-
-            
         
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -143,13 +187,13 @@ class Game:
 
         
                 if event.type == MOUSEBUTTONDOWN:
-                    if carnival_sign.collidepoint(mouse):
-                        pygame.draw.rect(self.screen, black, optionbar)
-                        self.screen.blit(prompt, (width/4 + 110, height/2 + 220))
-                        self.screen.blit(option1, (width/4 + 150 , height/2 + 250))
-                        self.screen.blit(option2, (width/4 + 400, height/2 + 250))
-                        pygame.display.update()
-                        self.clock.tick(60)
+                    if event.button == 1:
+                        if carnival_sign.collidepoint(mouse):
+                            sign_clicked = True
+                            show_prompt = True
+
+                    pygame.display.update()
+                    self.clock.tick(60)
 
                 #pygame.display.update()
   
