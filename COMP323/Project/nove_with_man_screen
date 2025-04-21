@@ -1,0 +1,294 @@
+"""
+GAME NAME: NOVA
+
+Our choice based decision game. Play as an alien that crashlands onto 
+Earth and take a good or bad path.
+
+Main Game Loop:
+-Game states: intro screen, prolouge, chapters, epilouge, game over
+-Game objects: player, NPCS, projectiles
+-User interface: prompts, dialogue 
+-Asset management: sprites, sounds, background layers
+
+Features: 
+-Arrow keys: move left, right, up, down
+-Points: good and bad points tracked based on choices
+
+
+
+Game structure: 
+-Player class: 
+-Background class: 
+-NPC class: 
+-Projectile class: 
+-Level Manager:
+"""
+import pygame
+from spritesheet import *
+import sys
+from pygame.locals import *
+from config import *
+from prologue import run_prologue
+from nova_chapter4 import run_chapter4
+from nova_chapter1 import chapter1
+
+black = (0,0,0)
+white = (255,255,255)
+light = (192,192,192)
+
+# TITLE OF CANVAS 
+pygame.display.set_caption("Nova")
+
+width = 1200 
+    
+height = 750
+
+screen = pygame.display.set_mode((width, height))
+
+TILESIZE = 32
+#15 blocks high, 20 blocks wide represented by B. P represents player
+# the dots represent empty space, the scattered B's represent obstacles
+tilemap = [
+    'BBBBBBBBBBBBBBBBBBBB',
+    'B.................B',
+    'B...BB............B',
+    'B.................B',
+    'B.................B',
+    'B.................B',
+    'B.................B',
+    'B........P........B',
+    'B.................B',
+    'B.................B',
+    'B.................B',
+    'B.................B',
+    'B............B....B',
+    'B.................B',
+    'B.................B',
+    'BBBBBBBBBBBBBBBBBBBB'
+]
+
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self, image, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+        self.speed_x = 0
+        self.speed_y = 0
+
+    def update(self):
+        self.speed_x = 0
+        self.speed_y = 0
+        key_state = pygame.key.get_pressed()
+        if key_state[pygame.K_LEFT]:
+            self.speed_x = -1
+        if key_state[pygame.K_RIGHT]:
+            self.speed_x = 1
+        if key_state[pygame.K_UP]:
+            self.speed_y = -1
+        if key_state[pygame.K_DOWN]:
+            self.speed_y = 1
+
+        self.rect.centerx += self.speed_x
+        self.rect.centery += self.speed_y
+
+        if self.rect.right > width: 
+            self.rect.right = width 
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > height:
+            self.rect.bottom = height
+
+class Block(pygame.sprite.Sprite): #tile map
+    def __init__(self, game, x, y):
+        self.game = game
+        self.groups = self.game.all_sprites, self.game.blocks
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.x = x* TILESIZE
+        self.y = y * TILESIZE
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.fill(white)
+
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+class Projectile(pygame.sprite.Sprite):
+
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((5,10))
+        self.image.fill(255, 0, 0)
+        self.rect = self.image.get_rect()
+        #weapon fired from front (top) of player sprite...
+        self.rect.bottom = y
+        self.rect.centerx = x
+        #speed of projectile up the screen 
+        self.speed_y = -10
+    
+    def update(self):
+        #update y relative to speed of projectile on y-axis
+        self.rect.y += self.speed_y
+        #remove from game window - if it goes beyond bounding for y-axis at top...
+        if self.rect.bottom < 0:
+            self.kill()
+
+class NPC(pygame.sprite.Sprite):
+
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((30,30))
+        self.image.fill((0, 255, 0))
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+        self.speed_x = 2
+        self.speed_y = 2
+    
+    def update(self):
+        self.rect.x += self.speed_x
+        if self.rect.right > width or self.rect.left < 0:
+            self.speed_x = -self.speed_x
+
+        self.rect.y += self.speed_y
+        if self.rect.bottom > height or self.rect.top < 0:
+            self.speed_y = -self.speed_y
+
+game_sprites = pygame.sprite.Group()
+player =  Player(pygame.image.load('aliens.png').convert_alpha(), x=100, y=100)
+game_sprites.add(player)
+sally = NPC(100, 100)
+game_sprites.add(sally)
+
+class Game:
+
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((width, height))
+        self.clock = pygame.time.Clock()
+        self.chapters = [run_prologue, chapter1, run_chapter4]  # Array of chapter functions
+    
+    def Start_screen(self):
+        
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        fontTitle = pygame.font.Font('freesansbold.ttf', 62)
+
+        exit = font.render('exit', True, white)
+        begin = font.render('begin', True, white)
+        title = fontTitle.render("NOVA", True, white)
+
+        exit_button = pygame.Rect(width/4 - 45, height/2 + 100, 150, 90)
+        begin_button = pygame.Rect(width/2 + 270, height/2 + 100,150,90)
+        
+
+        running = True
+        while running:
+            bg_image = pygame.image.load('nightsky.jpg').convert_alpha()
+            bg_image = pygame.transform.scale(bg_image,(1200,750))
+            bg_rect = bg_image.get_rect()
+            self.screen.blit(bg_image, bg_rect)
+            #self.screen.fill(black)
+            mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                #if exit is clicked page exits
+                    if exit_button.collidepoint(mouse):
+                        pygame.quit()
+                        sys.exit()
+                #if begin button is clicked game begins
+                    if begin_button.collidepoint(mouse):
+                        self.main_menu()
+
+
+        #buttons are drawn white when hovered over
+            if exit_button.collidepoint(mouse):
+                pygame.draw.rect(self.screen,light, exit_button)
+        
+            if begin_button.collidepoint(mouse):
+                pygame.draw.rect(self.screen,light, begin_button)
+
+
+        #adds the title, exit, and begin text
+            self.screen.blit(exit, (width/4, height/2 + 125))
+            self.screen.blit(begin, (width/2 + 300, height/2 + 125))
+            self.screen.blit(title, (width/2 -50, height/4))
+            
+            pygame.display.update()
+            self.clock.tick(60)
+
+    def main_menu(self):
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        fontTitle = pygame.font.Font('freesansbold.ttf', 62)
+        prologue = font.render('Prologue', True, white)
+        chapter4 = font.render('Chapter 4', True, white)
+
+        prologue_button = pygame.Rect(width/4 - 45, height/2 + 200, 250, 90)
+        chapter4_button = pygame.Rect(width/2 + 270, height/2 + 200, 250, 90)
+        
+        running = True
+        while running: 
+            bg_image = pygame.image.load('nightsky.jpg').convert_alpha()
+            bg_image = pygame.transform.scale(bg_image, (1200, 750))
+            bg_rect = bg_image.get_rect()
+            self.screen.blit(bg_image, bg_rect)
+            mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if prologue_button.collidepoint(mouse):  # Check if "Prologue" button is clicked
+                        pygame.time.wait(500)
+                        run_prologue(self.screen)  # Call the prologue function
+                        running = False  # Exit the main menu loop
+                    if chapter4_button.collidepoint(mouse):  # Check if "Chapter 4" button is clicked
+                        pygame.time.wait(500)
+                        run_chapter4(self.screen)  # Call the Chapter 4 function
+                        running = False  # Exit the main menu loop
+
+            # Draw buttons and text
+            pygame.draw.rect(self.screen, light, prologue_button)
+            pygame.draw.rect(self.screen, light, chapter4_button)
+            self.screen.blit(prologue, (prologue_button.x + 20, prologue_button.y + 25))
+            self.screen.blit(chapter4, (chapter4_button.x + 20, chapter4_button.y + 25))
+            
+            pygame.display.update()
+            self.clock.tick(60)
+
+    def game_loop(self):
+        running = True
+        while running: 
+            #'processing' inputs (events)
+            for event in pygame.event.get():
+                #check keyboard event -- keydown
+                if event.type == pygame.KEYDOWN:
+                    
+                    #check for ESCAPE key to extit the game
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()      
+            game.Start_screen()
+            #run_chapter4(self.screen)
+            # Update the display
+            pygame.display.flip()
+            player.update()
+            game_sprites.update()
+
+
+game = Game()
+game.game_loop()
+pygame.quit()
