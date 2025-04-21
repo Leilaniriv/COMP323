@@ -1,1 +1,0 @@
-self.game_loop()

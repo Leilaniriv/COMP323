@@ -29,6 +29,7 @@ import sys
 from pygame.locals import *
 from config import *
 from prologue import run_prologue
+from tanklevel import LevelTank
 
 black = (0,0,0)
 white = (255,255,255)
@@ -69,23 +70,49 @@ tilemap = [
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30,30))
+
+        # Load sprite sheet and animation frames
+        sprite = pygame.image.load('aliens.png').convert_alpha()
+        sprite_sheet = SpriteSheet(sprite)
+
+        self.an_list = []
+        an_steps = [10, 10]  # Right, Left
+        step_counter = 0
+        for animation in an_steps:
+            temp_list = []
+            for _ in range(animation):
+                temp_list.append(sprite_sheet.get_sprite(step_counter, 32, 45, 3, black))
+                step_counter += 1
+            self.an_list.append(temp_list)
+
+        self.action = 0  # 0 = right, 1 = left
+        self.frame = 0
+        self.frame_delay = 20
+        self.frame_counter = 0
+
+        # Set first image and rect
+        self.image = self.an_list[self.action][self.frame]
         self.rect = self.image.get_rect()
         self.rect.centerx = width / 2
         self.rect.bottom = height - 20
+
         self.speed_x = 0
+        self.speed_y = 0
 
     def update(self):
         self.speed_x = 0
         self.speed_y = 0
         key_state = pygame.key.get_pressed()
-        if key_state[pygame.K_LEFT]:
+
+        if key_state[pygame.K_a]:
             self.speed_x = -1
-        if key_state[pygame.K_RIGHT]:
+            self.action = 1
+        if key_state[pygame.K_d]:
             self.speed_x = 1
-        if key_state[pygame.K_UP]:
+            self.action = 0
+        if key_state[pygame.K_w]:
             self.speed_y = -1
-        if key_state[pygame.K_DOWN]:
+        if key_state[pygame.K_s]:
             self.speed_y = 1
 
         self.rect.centerx += self.speed_x
@@ -99,6 +126,17 @@ class Player(pygame.sprite.Sprite):
             self.rect.top = 0
         if self.rect.bottom > height:
             self.rect.bottom = height
+
+        # Animate if moving
+        if self.speed_x != 0 or self.speed_y != 0:
+            self.frame_counter += 1
+            if self.frame_counter >= self.frame_delay:
+                self.frame = (self.frame + 1) % len(self.an_list[self.action])
+                self.frame_counter = 0
+        else:
+            self.frame = 0
+
+        self.image = self.an_list[self.action][self.frame]
 
 class Block(pygame.sprite.Sprite): #tile map
     def __init__(self, game, x, y):
@@ -230,43 +268,47 @@ class Game:
 
 
     def game_loop(self):
+        from tanklevel import LevelTank
+
+        tanklevel = LevelTank(player)
+        tanklevel.run()
+
+        
         x = 500
         y = 400
         sprite_width = 32
         sprite_height = 32
 
-        #Creates sprite from spritesheet
         sprite = pygame.image.load('aliens.png').convert_alpha()
         sprite_sheet = SpriteSheet(sprite)
-
-        #animation list
         an_list = []
-        #left and right facing animations
         an_steps = [10,10]
-        #tracks sprite action on spritesheet
         action = 0
         frame = 0
         frame_delay = 20
         frame_counter = 0
         step_counter = 0
 
-        #runs through animation steps
         for animation in an_steps:
-            #cycles through an_steps list appending to temp and back in order to loop through all animations
             temp_list = []
-            for _ in range (animation):
-                #sets frame to step_counter, width = 32, height = 45, scale = 3, color = black
+            for _ in range(animation):
                 temp_list.append(sprite_sheet.get_sprite(step_counter, 32, 45, 3, black))
                 step_counter += 1
             an_list.append(temp_list)
 
-
         running = True
+
         while running:
 
             mouse = pygame.mouse.get_pos()
 
             font = pygame.font.Font('freesansbold.ttf', 18)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    pygame.quit()
+                    sys.exit()
 
             background = pygame.image.load('desert_background.jpeg').convert_alpha()
             background = pygame.transform.scale(background,(1200,750))
@@ -300,7 +342,7 @@ class Game:
                         pygame.display.update()
                         self.clock.tick(60)
 
-            self.screen.blit(an_list[action][frame], (x, y))
+            self.screen.blit(player.image, player.rect)
             pygame.display.update()
             self.clock.tick(90)
             player.update()
