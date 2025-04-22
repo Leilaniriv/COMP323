@@ -1,6 +1,7 @@
 import pygame
 from config import width, height, black, white
 from spritesheet import SpriteSheet
+from laserhallway import LaserHallway
 
 
 class LevelTank:
@@ -8,6 +9,7 @@ class LevelTank:
         self.player = player
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
+        
 
         # Load backgrounds
         self.intact_bg = pygame.image.load("lab_background.png").convert_alpha()
@@ -154,11 +156,20 @@ class LevelTank:
                     pygame.quit()
                     exit()
             self.update()
+        if self.done:
+            hallway = LaserHallway(self.player)
+            next_scene = hallway.run()
 
-    def reset(self):
-        self.hold_start = None
-        self.done = False
-        self.is_broken = False
-        self.puzzle_solved = False
-        self.player.rect.centerx = width // 2
-        self.player.rect.bottom = height - 100
+            if next_scene == "desert":
+                from desert import Desert
+                desert_scene = Desert(self.player)
+                desert_scene.run()
+
+    #def reset(self):
+     #   self.hold_start = None
+      #  self.done = False
+       # self.is_broken = False
+        #self.puzzle_solved = False
+        #self.player.rect.centerx = width // 2
+        #self.player.rect.bottom = height - 100
+

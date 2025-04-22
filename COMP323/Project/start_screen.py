@@ -4,9 +4,10 @@ import sys
 from pygame.locals import *
 from config import *
 from desert import *
-#from prologue import run_prologue
+from laserhallway import *
+from prologue import run_prologue
 from carnival import Carnival
-#from tanklevel import *
+from tanklevel import *
 from nova_game import player
 
 
@@ -82,12 +83,17 @@ class Game:
             self.clock.tick(60)
 
     def game_loop(self):
-        #run_prologue(self.screen)
-        #tanklevel = LevelTank(player)
-        #tanklevel.run()
+        run_prologue(self.screen)
+        tanklevel = LevelTank(player)
+        tanklevel.run()
+
+        laserhallway = LaserHallway(player)
+        laserhallway.run()
 
         desert = Desert(player)
         desert.run()
+
+
 
                         
 
