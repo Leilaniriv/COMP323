@@ -46,8 +46,10 @@ class Carnival:
             self.player.update()
             self.player.handle_collision(booths)
             
+            '''
             for booth in booths:
                 pygame.draw.rect(self.screen, black, booth)
+            '''
 
             
             #draw player
