@@ -97,10 +97,12 @@ class Player(pygame.sprite.Sprite):
 
         self.speed_x = 0
         self.speed_y = 0
+        
 
     def update(self):
         self.speed_x = 0
         self.speed_y = 0
+        
         key_state = pygame.key.get_pressed()
 
         if key_state[pygame.K_a]:
@@ -117,14 +119,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx += self.speed_x
         self.rect.centery += self.speed_y
 
-        if self.rect.right > width: 
-            self.rect.right = width 
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.bottom > height:
-            self.rect.bottom = height
 
         # Animate if moving
         if self.speed_x != 0 or self.speed_y != 0:
@@ -136,6 +130,38 @@ class Player(pygame.sprite.Sprite):
             self.frame = 0
 
         self.image = self.an_list[self.action][self.frame]
+
+    def handle_collision(self, platforms):
+        self.on_ground = False
+        self.on_wall = False
+
+        #horizontally
+        self.rect.x += self.speed_x
+        for platform in platforms:
+            if self.rect.colliderect(platform):
+                if self.speed_x > 0:
+                    self.rect.right = platform.left
+                elif self.speed_x < 0:
+                    self.rect.left = platform.right
+
+        #vertically 
+        self.rect.y += self.speed_y
+        for platform in platforms:
+            if self.rect.colliderect(platform):
+                if self.speed_y > 0:
+                    self.rect.bottom = platform.top
+                elif self.speed_y < 0:
+                    self.rect.top = platform.bottom
+
+        if self.rect.right > width: 
+            self.rect.right = width 
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > height:
+            self.rect.bottom = height
+
 
 class Block(pygame.sprite.Sprite): #tile map
     def __init__(self, game, x, y):
