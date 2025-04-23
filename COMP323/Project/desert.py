@@ -22,8 +22,8 @@ class Desert:
         option2 = font.render('Definitely', True, white)
 
         optionbar = pygame.Rect(width/4, height / 2 + 200, 600, 100)
-        option1_button = pygame.Rect(width/4 + 138, height / 2 + 240, 60, 40)
-        option2_button = pygame.Rect(width/4 + 380, height / 2 + 240, 60, 40)
+        option1_button = pygame.Rect(width/4 + 138, height / 2 + 240, 55, 40)
+        option2_button = pygame.Rect(width/4 + 380, height / 2 + 240, 120, 40)
 
         pygame.draw.rect(self.screen, black, optionbar)
         pygame.draw.rect(self.screen, light, option1_button)
@@ -42,7 +42,9 @@ class Desert:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if option1_button.collidepoint(mouse) or option2_button.collidepoint(mouse):
                     #change to carnival scene
-                    Carnival.carnival_scene(self)
+                    carnival = Carnival(player)
+                    carnival.run()
+                    #return("carnival")
             
     def desertescape(self):
         background = pygame.image.load('desert_background.jpeg').convert_alpha()
