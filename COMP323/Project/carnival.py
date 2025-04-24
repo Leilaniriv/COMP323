@@ -3,7 +3,7 @@ import sys
 from spritesheet import *
 from config import*
 from nova_game import Player
-#from balloon_pop import Balloon
+from balloon_pop import *
 
 class Carnival:
     def __init__(self,player):
@@ -33,11 +33,12 @@ class Carnival:
         signs = [sign1, sign2, sign3, sign4, sign5, sign6, sign7]
 
         #carnival sign text
+        admission_booth_sign = font.render('ADMISSION', True, black)
         pretzel_vendor_sign = font.render('PRETZELS', True, black)
         balloon_pop_sign = smaller_font.render('BALLOON POP', True, black)
         ticket_both_sign = smaller_font.render('TICKET BOOTH', True, black)
 
-        sign_text = [pretzel_vendor_sign, balloon_pop_sign]
+        sign_text = [pretzel_vendor_sign, balloon_pop_sign, ticket_both_sign]
 
         #booth rects for collision
         booth1 = pygame.Rect(width/4 - 90, height / 4 - 70, 110, 80) 
@@ -51,18 +52,27 @@ class Carnival:
         booths = [booth1, booth2, booth3, booth4, booth5, booth6, booth7]
 
         
-        sign_clicked = False
-        show_prompt = False
-        press_yes = False
-        press_no = False
+        #Admission / booth 1
+        admission_sign_clicked = False
+        admission_prompt = False
 
-        #Petzel Vendor
+        admission_booth = font.render('Get your tickets here!', True, white)
+
+        #Petzel Vendor / booth3
+        pretzel_sign_clicked = False
+        pretzel_prompt = False
+        pretzel_response_yes = False
+        pretzel_response_no = False
+
         pretzel_vendor = font.render('Would you like a pretzel?', True, white)
         select = font.render('Press y or n', True, white)
-        pretzel_response = font.render('Dont have any money!? Get out of my line!', True, white)
+        pretzel_response = font.render('Don\'t have any money!? Get out of my line!', True, white)
         pretzel_response2 = font.render('Why are you here?! Get out of my line!', True, white)
 
-        #costume
+        #ticket booth / booth4
+        ticket_sign_clicked = False
+        ticket_prompt = False
+
         ticket_booth = font.render('Cool Costume!', True, white)
 
 
@@ -73,31 +83,34 @@ class Carnival:
             mouse = pygame.mouse.get_pos()
             key_pressed = pygame.key.get_pressed()
 
-            #check if sign is clicked
-            if sign_clicked:
-                if booth3.collidepoint(mouse):
-                    show_prompt = True
-                if show_prompt:
-                    self.screen.blit(pretzel_vendor, (width/4, height/4))
-                    self.screen.blit(select, (width/4, height/4 + 15))
-                    
-                    if key_pressed[pygame.K_y]:
-                        show_prompt = False
-                        press_yes = True
-                    if press_yes:
-                        self.screen.blit(pretzel_response, (width/4, height/4 + 30))
-                    elif key_pressed[pygame.K_n]:
-                        show_prompt = False
-                        press_no = True
-                    if press_no:
-                        self.screen.blit(pretzel_response2, (width/4, height/4 + 30))
+            if booth1.collidepoint(mouse) and admission_sign_clicked:
+                if admission_prompt:
+                    self.screen.blit(admission_booth, (width/4 - 200, height/4 - 100))
                     
 
-                elif booth4.collidepoint(mouse):
-                    show_prompt = True
-                if show_prompt:
-                    self.screen.blit(ticket_booth, (width/4 + 100, height/4 + 100))
+            #check if sign is clicked
+            if booth3.collidepoint(mouse) and pretzel_sign_clicked:
+                #pretzel_prompt = True
+                if pretzel_prompt:
+                    self.screen.blit(pretzel_vendor, (width/4 + 100, height/4 - 100))
+                    self.screen.blit(select, (width/4 + 100, height/4 - 85))
+                
+                    if key_pressed[pygame.K_y]:
+                        pretzel_response_yes = True
                     
+                    elif key_pressed[pygame.K_n]:
+                        pretzel_response_no = True
+
+                if pretzel_response_yes:
+                        self.screen.blit(pretzel_response, (width/4 + 100, height/4 -70)) 
+                elif pretzel_response_no:
+                    self.screen.blit(pretzel_response2, (width/4 + 100, height/4 - 70))
+
+            if booth4.collidepoint(mouse) and ticket_sign_clicked:
+                #ticket_sign_clicked = True
+                if ticket_prompt:
+                    self.screen.blit(ticket_booth, (width/4 + 100, height/4 + 300))
+                
                 
 
             for event in pygame.event.get():
@@ -106,19 +119,21 @@ class Carnival:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
+                        if booth1.collidepoint(mouse):
+                            admission_sign_clicked = True
+                            admission_prompt = True
+                        if booth2.collidepoint(mouse):
+                            balloon = BalloonGame()
+                            balloon.run()
                         if booth3.collidepoint(mouse):
-                            sign_clicked = True
-                            show_prompt = True
+                            pretzel_sign_clicked = True
+                            pretzel_prompt = True
+                            pretzel_response_yes = False
+                            pretzel_response_no = False
                         if booth4.collidepoint(mouse):
-                            sign_clicked = True
-                            show_prompt = True
+                            ticket_sign_clicked = True
+                            ticket_prompt = True
 
-                '''
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if booth2.collidepoint(mouse):
-                        balloon = Balloon()
-                        balloon.run()
-                '''
 
             self.player.update()
             self.player.handle_collision(booths)
@@ -130,6 +145,7 @@ class Carnival:
                 self.screen.blit(pretzel_vendor_sign, (width/2 - 40, height / 3 - 47))
                 self.screen.blit(balloon_pop_sign, (width/4 - 240, height / 2 + 50))
                 self.screen.blit(ticket_both_sign, (width/3 + 15, height / 2 + 172))
+                self.screen.blit(admission_booth_sign, (width/4 - 90, height / 4 - 50))
 
             
             '''
