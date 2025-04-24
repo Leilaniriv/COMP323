@@ -172,7 +172,7 @@ class Chapter_6:
                 moving = True
     
     
-    def display_agent(self):
+    def display_agent(self, agent):
         self.screen.blit(self.agent.image, self.agent.rect)  
 
     def run(self):
@@ -211,7 +211,7 @@ class Chapter_6:
                     text_timer_start = pygame.time.get_ticks()  # Start the text timer
 
             if show_agent:
-                self.display_agent()  # Render the agent
+                self.display_agent(agent)  # Render the agent
 
                 # Handle text display logic
                 elapsed_time = pygame.time.get_ticks() - text_timer_start
@@ -251,9 +251,9 @@ class Chapter_6:
                         text_timer_start = pygame.time.get_ticks()
                 elif text_state == 5:
                     display_text(screen, "Press space to fire.", (255, 255, 255), 50, screen.get_height() - 100)
+                    agent.fire()
                     if pygame.key.get_pressed()[pygame.K_SPACE]:
                         self.player.fire()
-                        agent.fire()
                         # Start agent movement and collision detection after this point
                         agent.update()
                         if agent.check_collision(projectiles):
@@ -292,7 +292,11 @@ class Chapter_6:
             self.clock.tick(60)
 
 
-agent = NPC(pygame.image.load('agent.jpeg').convert_alpha(), 100, 100)
-player = Player(pygame.image.load('cute_alien.png').convert_alpha(), agent.rect.centerx, agent.rect.centery)
+agent = NPC(pygame.image.load('sully.jpeg').convert_alpha(), 100, 100)
+agent.image = pygame.transform.scale(agent.image, (200, 200))  # Scale the agent image to 200x200 pixels
+
+alien_image = pygame.image.load('alien.jpeg').convert_alpha()
+alien_image = pygame.transform.scale(alien_image, (200, 200))  # Scale the alien image to 200x200 pixels
+player = Player(alien_image, 100, 100)
 chapter6 = Chapter_6(player, agent)
 chapter6.run()
