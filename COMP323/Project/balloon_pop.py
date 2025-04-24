@@ -108,10 +108,19 @@ class Launcher:
         
 
 class BalloonGame:  
+    def __init__(self):
+        self.running = True
+        self.won = True
+        
     def runGame(player):
         pygame.init()
         screen = pygame.display.set_mode((width, height))
         clock = pygame.time.Clock()  # Control game speed
+
+        
+
+
+        font = pygame.font.Font('freesansbold.ttf', 18)
 
         """Main game loop"""
         #load background
@@ -140,6 +149,18 @@ class BalloonGame:
         start_x = (width - (grid_size * spacing_x) + 10) // 2
         start_y = (height - (grid_size * spacing_y) -10) // 2
 
+        #slider
+        red_area = pygame.Rect(width/2 - 300, height - 100, 600, 50) 
+        green_area = pygame.Rect(width/2 - 50, height - 100, 100, 50) 
+        slider = pygame.Rect(width/2 - 10 , height - 98, 15, 46) 
+
+        
+
+        slider_speed = 8
+        slider_direction = 1 
+        slider_active = True  
+
+
         # Create balloons in a grid
         balloons = []
         throwables = []
@@ -153,6 +174,9 @@ class BalloonGame:
 
 
         game_score = 0
+        popped_count = 0
+        max_pop = 3
+        current_round = False
         # Game loop
         running = True
 
@@ -183,32 +207,45 @@ class BalloonGame:
             x = 575
             y = 600
 
+            keys = pygame.key.get_pressed()
+
             screen.blit(background, (0, -75))  # clears previous drawings
 
+            pygame.draw.rect(screen, red, red_area)
+            pygame.draw.rect(screen, (50,205,50), green_area)
+            pygame.draw.rect(screen, black, slider)
 
-            launcher.draw(screen,x,y)
+
+            #launcher.draw(screen,x,y)
 
             #draw balloons
             for balloon in balloons:
                 balloon.draw(screen)
 
+            if slider_active:
+                slider.x += slider_speed * slider_direction
+                if slider.right >= red_area.right or slider.left <= red_area.left:
+                    slider_direction *= -1
+                current_round = False
+
+
+
+            if not slider_active and not current_round:
+                if slider.colliderect(green_area):
+                    for balloon in balloons:
+                        if not  balloon.popped and popped_count < max_pop:
+                            balloon.popped = True
+                            balloon.pop_index = 0 
+                            game_score += 1
+                            popped_count += 1
+                            current_round = True
+                            break 
             
 
-            for throwable in throwables[:]:
-                throwable.update()
-                if throwable.active == True: 
-                    screen.blit(throwable.image, throwable.rect)
-                if throwable.active == False:
-                    throwables.remove(throwable)
-
-                for balloon in balloons:
-                    if balloon.rect.colliderect(throwable.rect) and not balloon.popped:
-                        balloon.popped = True
-                        balloon.pop_index = 0 
-                        game_score += 1
-                        throwables.remove(throwable)  # Remove the throwable after hitting a balloon
-                        break 
-
+            
+            if keys[pygame.K_SPACE] and max_pop < 3:
+                slider_active = False
+        
                 
                 #pygame.display.update()
             
@@ -222,31 +259,26 @@ class BalloonGame:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                    
 
-            
-                moving = False
-                #dart_width = width // 2
+
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        dart.angle = min(dart.angle + 5, 120)
-                    
-                    if event.key == pygame.K_RIGHT:
-                        dart.angle = min(dart.angle - 5, 30)
+                    if event.key == pygame.K_SPACE and slider_active:
+                        slider_active = False
+                    elif event.key == pygame.K_SPACE and popped_count < 3:
+                        slider_active = True
             
+            if popped_count == max_pop:
+                running = False
+                won = True
+        return won
 
-                    if event.key == pygame.K_SPACE:
-                        current_time = pygame.time.get_ticks()
-                        if current_time - last_fired > firing_delay:
-                            throwables.append(Throwable(x,y, angle, speed= 30))
-                            last_fired = current_time
-                        
-                            if game_score == 3:
-                                break
-                        pygame.display.update()
+                    
+            
+                   # pygame.display.update()
+            
                     
     
-    def run(self):
+    def run(self):  
         self.runGame()
                                     
 

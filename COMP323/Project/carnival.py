@@ -20,7 +20,6 @@ class Carnival:
         self.sounds['carnival'].play(loops=-1)
 
 
-
     def carnival_scene(self):
         tan = (211, 167, 124)
         background = pygame.image.load('carnival.png').convert_alpha()
@@ -83,6 +82,9 @@ class Carnival:
 
         ticket_booth = font.render('Cool Costume!', True, white)
 
+        slider_win = font.render('Good Job', True, white)
+
+
         run = True
         while run:
             self.screen.blit(background, (0,0))
@@ -131,7 +133,10 @@ class Carnival:
                             admission_prompt = True
                         if booth2.collidepoint(mouse):
                             balloon = BalloonGame()
-                            balloon.run()
+                            result = balloon.run()
+                            if result:
+                                self.screen.blit(slider_win, (width/4 + 100, height/4 + 300))
+
                         if booth3.collidepoint(mouse):
                             pretzel_sign_clicked = True
                             pretzel_prompt = True
