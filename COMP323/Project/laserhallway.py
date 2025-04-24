@@ -108,7 +108,7 @@ class LaserHallway:
 
             if self.player.rect.colliderect(self.exit_zone):
                 pygame.mixer.stop() # replace with scene switch
-                return("desert")
+                return("run_desert_text")
 
             # Show "hit" text
             if self.hit_text and pygame.time.get_ticks() - self.hit_timer < 2000:

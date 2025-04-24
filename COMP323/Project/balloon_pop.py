@@ -39,73 +39,7 @@ class Balloon:
             return False
             '''
         return (self.rect.collidepoint(pos))
-
-
-
-class Throwable:
-    """
-    Spawn a throwable object
-    """
-    def __init__(self, x, y, angle = 75, speed=15):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('dart.png').convert_alpha()
-        self.x = x
-        self.y = y
-
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.angle = angle
-
-        #rotated = pygame.transform.rotate(self.image, self.angle)
-        #new_rect = rotated.get_rect(center=(x, y))
-
-        
-        angle_rad = math.radians(angle)
-
-        self.vx = speed * math.cos(angle_rad)  #horizontal velocity
-        self.vy = -speed * math.sin(angle_rad)  #vertical velocity (negative because it moves up)
-        self.active = True
-
-        self.gravity = 0.5  # Gravity to simulate realistic falling motion
-        
-
-    def update(self):
-        """
-        Move the throwable in an arc-like trajectory.
-        """
-        self.vy += self.gravity  #apply gravity to vertical velocity
-        self.rect.x += self.vx  #move horizontally
-        self.rect.y += self.vy  #move vertically
-
-        # Remove dart if it goes off the screen
-        if self.rect.y > height or self.rect.x > width or self.rect.x < 0:
-            self.active = False
-            screen.blit(background, (0, -75))
-
-    def draw(self, screen):
-        rotated = pygame.transform.rotate(self.image, self.angle)
-        new_rect = rotated.get_rect(center=(self.x, self.y))
-        screen.blit(rotated, new_rect.topleft)
-
- 
     
-
-
-class Launcher:
-    def __init__(self, x, y, angle = -75):
-        self.x = x
-        self.y = y
-        self.angle = angle
-        self.original_image = pygame.image.load('dart.png').convert_alpha()  # or use a shape
-        self.rect = self.original_image.get_rect(center=(x, y))
-
-    def draw(self, screen, x = 300, y= 400):
-        background = pygame.image.load('balloonpopbg.png').convert_alpha()
-        background = pygame.transform.scale(background, (1200, 750))
-        screen.blit(background, (0, -75))
-        screen.blit(self.original_image, (x, y))
-        
 
 class BalloonGame:  
     def __init__(self):
@@ -154,7 +88,6 @@ class BalloonGame:
         green_area = pygame.Rect(width/2 - 50, height - 100, 100, 50) 
         slider = pygame.Rect(width/2 - 10 , height - 98, 15, 46) 
 
-        
 
         slider_speed = 8
         slider_direction = 1 
@@ -163,7 +96,6 @@ class BalloonGame:
 
         # Create balloons in a grid
         balloons = []
-        throwables = []
 
 
         for row in range(grid_size):
@@ -177,31 +109,13 @@ class BalloonGame:
         popped_count = 0
         max_pop = 3
         current_round = False
+
         # Game loop
         running = True
 
 
         screen.blit(background, (0, -75))
 
-
-        launcher = Launcher(x, y)
-
-        dart = Throwable(x,y)
-
-
-        last_fired = 0
-        firing_delay = 400
-
-        angle = 75
-
-        '''
-        #add button for dart throw
-        font = pygame.font.Font('freesansbold.ttf', 25)
-        throw = font.render('Throw', True, black)
-        throw_button = pygame.Rect(width/4 - 135, height/2 - 30, 150, 90)
-        pygame.draw.rect(screen, white, throw_button)
-        screen.blit(throw, (width/4 - 100, height/2))
-        '''
 
         while running:
             x = 575
@@ -216,7 +130,6 @@ class BalloonGame:
             pygame.draw.rect(screen, black, slider)
 
 
-            #launcher.draw(screen,x,y)
 
             #draw balloons
             for balloon in balloons:
@@ -246,8 +159,7 @@ class BalloonGame:
             if keys[pygame.K_SPACE] and max_pop < 3:
                 slider_active = False
         
-                
-                #pygame.display.update()
+            
             
 
 
@@ -272,9 +184,6 @@ class BalloonGame:
                 won = True
         return won
 
-                    
-            
-                   # pygame.display.update()
             
                     
     

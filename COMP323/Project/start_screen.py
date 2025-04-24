@@ -38,8 +38,8 @@ class Game:
         begin = font.render('begin', True, white)
         title = fontTitle.render("NOVA", True, white)
 
-        exit_button = pygame.Rect(width/4 - 45, height/2 + 100, 150, 90)
-        begin_button = pygame.Rect(width/2 + 270, height/2 + 100,150,90)
+        exit_button = pygame.Rect(width/4 - 45, height/2 + 100, 140, 90)
+        begin_button = pygame.Rect(width/2 + 270, height/2 + 100,135,90)
 
         running = True
         while running:
@@ -84,14 +84,14 @@ class Game:
             self.clock.tick(60)
 
     def game_loop(self):
-        #run_prologue(self.screen)
-        #tanklevel = LevelTank(player)
-        #tanklevel.run()
+        run_prologue(self.screen)
+        tanklevel = LevelTank(player)
+        tanklevel.run()
 
-        #laserhallway = LaserHallway(player)
-        #laserhallway.run()
+        laserhallway = LaserHallway(player)
+        laserhallway.run()
 
-        #run_desert_text(self.screen)
+        run_desert_text(self.screen)
 
         desert = Desert(player)
         desert.run()
