@@ -101,162 +101,160 @@ class Launcher:
         self.rect = self.original_image.get_rect(center=(x, y))
 
     def draw(self, screen, x = 300, y= 400):
+        background = pygame.image.load('balloonpopbg.png').convert_alpha()
+        background = pygame.transform.scale(background, (1200, 750))
         screen.blit(background, (0, -75))
         screen.blit(self.original_image, (x, y))
         
 
+class BalloonGame:  
+    def runGame(player):
+        pygame.init()
+        screen = pygame.display.set_mode((width, height))
+        clock = pygame.time.Clock()  # Control game speed
 
-pygame.init()
-screen = pygame.display.set_mode((width, height))
-clock = pygame.time.Clock()  # Control game speed
-
-"""Main game loop"""
-#load background
-background = pygame.image.load('balloonpopbg.png').convert_alpha()
-background = pygame.transform.scale(background, (1200, 750))
-
-#load sprite sheets
-balloon_spritesheet = SpriteSheet(pygame.image.load('balloonline.png').convert_alpha())
-pop_spritesheet = SpriteSheet(pygame.image.load('popAnimation.png').convert_alpha())
-
-
-#balloon sprites
-b_steps = 1  # Number of frames for the balloon animation
-p_steps = 1  # Number of frames for the pop animation
-
-
-normal_sprites = [balloon_spritesheet.get_sprite(i, 42, 52, 1.5, black) for i in range(b_steps)]
-pop_sprites = [pop_spritesheet.get_sprite(i, 42, 52, 1.5, black) for i in range(p_steps)]
-
-
-# Grid positioning
-grid_size = 4
-spacing_x = 69
-spacing_y = 70
-start_x = (width - (grid_size * spacing_x) + 10) // 2
-start_y = (height - (grid_size * spacing_y) -10) // 2
-
-# Create balloons in a grid
-balloons = []
-throwables = []
-
-
-for row in range(grid_size):
-    for col in range(grid_size):
-        x = start_x + col * spacing_x
-        y = start_y + row * spacing_y
-        balloons.append(Balloon(x, y, normal_sprites, pop_sprites))
-
-
-game_score = 0
-# Game loop
-running = True
-
-
-screen.blit(background, (0, -75))
-
-
-launcher = Launcher(x, y)
-
-dart = Throwable(x,y)
-
-
-last_fired = 0
-firing_delay = 400
-
-angle = 75
-
-'''
-#add button for dart throw
-font = pygame.font.Font('freesansbold.ttf', 25)
-throw = font.render('Throw', True, black)
-throw_button = pygame.Rect(width/4 - 135, height/2 - 30, 150, 90)
-pygame.draw.rect(screen, white, throw_button)
-screen.blit(throw, (width/4 - 100, height/2))
-'''
-
-while running:
-    x = 575
-    y = 600
-
-    screen.blit(background, (0, -75))  # clears previous drawings
-
-
-    launcher.draw(screen,x,y)
-
-    #draw balloons
-    for balloon in balloons:
-        balloon.draw(screen)
-
-    
-
-    for throwable in throwables[:]:
-        throwable.update()
-        if throwable.active == True: 
-            screen.blit(throwable.image, throwable.rect)
-        if throwable.active == False:
-            throwables.remove(throwable)
-
-        for balloon in balloons:
-            if balloon.rect.colliderect(throwable.rect) and not balloon.popped:
-                balloon.popped = True
-                balloon.pop_index = 0 
-                game_score += 1
-                throwables.remove(throwable)  # Remove the throwable after hitting a balloon
-                break 
-
+        """Main game loop"""
+        #load background
+        background = pygame.image.load('balloonpopbg.png').convert_alpha()
+        background = pygame.transform.scale(background, (1200, 750))
         
-        #pygame.display.update()
-    
+
+        #load sprite sheets
+        balloon_spritesheet = SpriteSheet(pygame.image.load('balloonline.png').convert_alpha())
+        pop_spritesheet = SpriteSheet(pygame.image.load('popAnimation.png').convert_alpha())
 
 
-    pygame.display.update()
-    clock.tick(30)  
+        #balloon sprites
+        b_steps = 1  # Number of frames for the balloon animation
+        p_steps = 1  # Number of frames for the pop animation
 
-    # Handle events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+
+        normal_sprites = [balloon_spritesheet.get_sprite(i, 42, 52, 1.5, black) for i in range(b_steps)]
+        pop_sprites = [pop_spritesheet.get_sprite(i, 42, 52, 1.5, black) for i in range(p_steps)]
+
+
+        # Grid positioning
+        grid_size = 4
+        spacing_x = 69
+        spacing_y = 70
+        start_x = (width - (grid_size * spacing_x) + 10) // 2
+        start_y = (height - (grid_size * spacing_y) -10) // 2
+
+        # Create balloons in a grid
+        balloons = []
+        throwables = []
+
+
+        for row in range(grid_size):
+            for col in range(grid_size):
+                x = start_x + col * spacing_x
+                y = start_y + row * spacing_y
+                balloons.append(Balloon(x, y, normal_sprites, pop_sprites))
+
+
+        game_score = 0
+        # Game loop
+        running = True
+
+
+        screen.blit(background, (0, -75))
+
+
+        launcher = Launcher(x, y)
+
+        dart = Throwable(x,y)
+
+
+        last_fired = 0
+        firing_delay = 400
+
+        angle = 75
+
+        '''
+        #add button for dart throw
+        font = pygame.font.Font('freesansbold.ttf', 25)
+        throw = font.render('Throw', True, black)
+        throw_button = pygame.Rect(width/4 - 135, height/2 - 30, 150, 90)
+        pygame.draw.rect(screen, white, throw_button)
+        screen.blit(throw, (width/4 - 100, height/2))
+        '''
+
+        while running:
+            x = 575
+            y = 600
+
+            screen.blit(background, (0, -75))  # clears previous drawings
+
+
+            launcher.draw(screen,x,y)
+
+            #draw balloons
+            for balloon in balloons:
+                balloon.draw(screen)
+
             
 
-     
-        moving = False
-        #dart_width = width // 2
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                dart.angle = min(dart.angle + 5, 120)
+            for throwable in throwables[:]:
+                throwable.update()
+                if throwable.active == True: 
+                    screen.blit(throwable.image, throwable.rect)
+                if throwable.active == False:
+                    throwables.remove(throwable)
+
+                for balloon in balloons:
+                    if balloon.rect.colliderect(throwable.rect) and not balloon.popped:
+                        balloon.popped = True
+                        balloon.pop_index = 0 
+                        game_score += 1
+                        throwables.remove(throwable)  # Remove the throwable after hitting a balloon
+                        break 
+
+                
+                #pygame.display.update()
             
-            if event.key == pygame.K_RIGHT:
-                dart.angle = min(dart.angle - 5, 30)
-    
-
-            if event.key == pygame.K_SPACE:
-                current_time = pygame.time.get_ticks()
-                if current_time - last_fired > firing_delay:
-                    throwables.append(Throwable(x,y, angle, speed= 30))
-                    last_fired = current_time
-
-    '''
-    if game_score == 3:
-        screen.fill(white)
-        font = pygame.font.SysFont(None, 60)
-        text = font.render("You win!", True, red)
-        screen.blit(text, (width // 2 - 100, height // 2))
-        pygame.display.update()
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-    '''
-                            
 
 
+            pygame.display.update()
+            clock.tick(30)  
 
+            # Handle events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                    
 
-                            
+            
+                moving = False
+                #dart_width = width // 2
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        dart.angle = min(dart.angle + 5, 120)
+                    
+                    if event.key == pygame.K_RIGHT:
+                        dart.angle = min(dart.angle - 5, 30)
+            
 
+                    if event.key == pygame.K_SPACE:
+                        current_time = pygame.time.get_ticks()
+                        if current_time - last_fired > firing_delay:
+                            throwables.append(Throwable(x,y, angle, speed= 30))
+                            last_fired = current_time
                         
-                            
-                 
+                            if game_score == 3:
+                                break
+                        pygame.display.update()
+                    
+    
+    def run(self):
+        self.runGame()
+                                    
+
+
+
+
+                                    
+
+                                
+                                    
+                        
