@@ -2,6 +2,8 @@ import pygame
 from config import width, height, black, white
 from spritesheet import SpriteSheet
 from laserhallway import LaserHallway
+from keypad import KeypadGame
+
 
 
 class LevelTank:
@@ -92,15 +94,19 @@ class LevelTank:
             self.screen.blit(self.an_list[self.action][self.frame], self.player.rect)
 
             # Keypad interaction
+# Keypad interaction
             if self.player.rect.colliderect(self.keypad_rect):
-                font = pygame.font.Font(None, 24)
+                font = pygame.font.Font("ByteBounce.ttf", 32)
                 self.screen.blit(font.render("Press E to use keypad", True, white), (self.player.rect.x - 30, self.player.rect.y - 20))
-                if keys[pygame.K_e]:
-                    self.puzzle_solved = True
+                if keys[pygame.K_e] and not self.puzzle_solved:
+                    from keypad import KeypadGame
+                    keypad = KeypadGame(self.screen)
+                    self.puzzle_solved = keypad.run()
+
 
             # Door interaction
             if self.player.rect.colliderect(self.door_rect):
-                font = pygame.font.Font(None, 24)
+                font = pygame.font.Font("ByteBounce.ttf", 32)
                 if self.puzzle_solved:
                     self.done = True
                 else:
@@ -133,7 +139,7 @@ class LevelTank:
             self.screen.blit(self.an_list[self.action][self.frame], self.player.rect)
 
             # Prompt
-            font = pygame.font.Font(None, 32)
+            font = pygame.font.Font("ByteBounce.ttf", 32)
             prompt = font.render("Hold SPACE to break the glass...", True, white)
             self.screen.blit(prompt, (width // 2 - 150, height - 40))
 

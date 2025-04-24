@@ -30,8 +30,8 @@ class Game:
     
     def Start_screen(self):
         
-        font = pygame.font.Font('freesansbold.ttf', 32)
-        fontTitle = pygame.font.Font('freesansbold.ttf', 62)
+        font = pygame.font.Font('ByteBounce.ttf', 32)
+        fontTitle = pygame.font.Font('ByteBounce.ttf', 62)
 
         exit = font.render('exit', True, white)
         begin = font.render('begin', True, white)

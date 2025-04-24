@@ -10,11 +10,14 @@ class LaserHallway:
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
 
-        self.alien_img = pygame.image.load("aliens.png").convert_alpha()
-        self.alien_img = pygame.transform.scale(self.alien_img, (64, 90))
-
-        self.player_rect = pygame.Rect(100, height // 2, 64, 90)
+        self.hallway_bg = pygame.image.load("laserhallway.png").convert_alpha()
+        self.hallway_bg = pygame.transform.scale(self.hallway_bg, (width, height))
+        
+        self.player.rect.x = 100
+        self.player.rect.y = height // 2
         self.player_speed = 4
+
+        
 
         self.lasers = [
             pygame.Rect(300, 50, 15, 300),
@@ -24,7 +27,7 @@ class LaserHallway:
             pygame.Rect(900, 200, 15, 300),
             pygame.Rect(1050, 100, 15, 300),
         ]
-        self.laser_speeds = [2, -2, 3, -3, 2, -3]
+        self.laser_speeds = [4, -4, 5, -5, 4, -5]
 
         self.exit_zone = pygame.Rect(1100, 0, 100, height)
         self.hit_text = None
@@ -32,10 +35,10 @@ class LaserHallway:
 
     def run(self):
         running = True
-        font = pygame.font.Font('freesansbold.ttf', 18)
+        font = pygame.font.Font('ByteBounce.ttf', 42)
 
         while running:
-            self.screen.fill((0, 0, 0))
+            self.screen.blit(self.hallway_bg, (0, 0))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -44,14 +47,28 @@ class LaserHallway:
 
             # Player movement
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_w] and self.player_rect.top > 0:
-                self.player_rect.y -= self.player_speed
-            if keys[pygame.K_s] and self.player_rect.bottom < height:
-                self.player_rect.y += self.player_speed
-            if keys[pygame.K_a] and self.player_rect.left > 0:
-                self.player_rect.x -= self.player_speed
-            if keys[pygame.K_d] and self.player_rect.right < width:
-                self.player_rect.x += self.player_speed
+            moving = False
+                        
+            if keys[pygame.K_w] and self.player.rect.top > 0:
+                self.player.rect.y -= self.player_speed
+                moving = True
+
+            if keys[pygame.K_s] and self.player.rect.bottom < height:
+                self.player.rect.y += self.player_speed
+                moving = True
+
+            if keys[pygame.K_a] and self.player.rect.left > 0:
+                self.player.rect.x -= self.player_speed
+                self.player.action = 1  # Left animation
+                moving = True
+
+            if keys[pygame.K_d] and self.player.rect.right < width:
+                self.player.rect.x += self.player_speed
+                self.player.action = 0  # Right animation
+                moving = True
+
+            # Update player animation
+            self.player.update()
 
             # Laser movement
             for i, laser in enumerate(self.lasers):
@@ -66,18 +83,17 @@ class LaserHallway:
             # Draw exit zone
             pygame.draw.rect(self.screen, (0, 0, 255), self.exit_zone)
 
-            # Draw player
-            self.screen.blit(self.alien_img, self.player_rect.topleft)
+            self.screen.blit(self.player.image, self.player.rect)
 
             # Collision detection
             for laser in self.lasers:
-                if self.player_rect.colliderect(laser):
+                if self.player.rect.colliderect(laser):
                     self.hit_text = font.render("Hit by laser!", True, (255, 255, 255))
                     self.hit_timer = pygame.time.get_ticks()
-                    self.player_rect.x, self.player_rect.y = 100, height // 2
+                    self.player.rect.x, self.player.rect.y = 100, height // 2
                     break
 
-            if self.player_rect.colliderect(self.exit_zone):
+            if self.player.rect.colliderect(self.exit_zone):
                 print("Reached desert!")  # replace with scene switch
                 return("desert")
 
