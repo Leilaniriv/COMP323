@@ -1,10 +1,10 @@
 #chapter 7 
+#chapter 7 
 import pygame
 import sys
 import random  # Import random for generating random positions
 from config import width, height
 from config import *
-from nova_epilogue import run_bad_ending, run_good_ending
 
 
 pygame.init()
@@ -50,13 +50,13 @@ class Player(pygame.sprite.Sprite):
         self.speed_y = 0
         key_state = pygame.key.get_pressed()
         if key_state[pygame.K_a]:
-            self.speed_x = -1
+            self.speed_x = -3
         if key_state[pygame.K_d]:
-            self.speed_x = 1
+            self.speed_x = 3
         if key_state[pygame.K_w]:
-            self.speed_y = -1
+            self.speed_y = -3
         if key_state[pygame.K_s]:
-            self.speed_y = 1
+            self.speed_y = 3
 
         self.rect.centerx += self.speed_x
         self.rect.centery += self.speed_y
@@ -100,7 +100,7 @@ projectiles = pygame.sprite.Group()
 class NPC(pygame.sprite.Sprite):
     def __init__(self, image, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(image).convert_alpha()  # Load the image
+        self.image = image  # Load the image
         self.rect = self.image.get_rect()
         self.rect.centerx = x  # Use the provided x position
         self.rect.centery = y  # Use the provided y position
@@ -153,8 +153,9 @@ class Chapter_7:
         self.lab_bg = pygame.image.load("lab_background.png").convert_alpha()
         self.lab_bg = pygame.transform.scale(self.lab_bg, (width, height))
 
-        # Initialize CIA agent (Sully)
-        self.cia_agent = NPC("agent.jpeg", 300, 200)  # Adjusted x-coordinate to move Sully further right
+        self.sully_image = pygame.image.load('sully.jpeg').convert_alpha()
+        self.sully_image = pygame.transform.scale(self.sully_image, (200, 200))  
+        
     
     def display_agents(self, npc_1, npc_2, npc_3):
         # Draw all agents
@@ -166,7 +167,7 @@ class Chapter_7:
 
     def display_sully(self):
         # Draw Sully (CIA agent)
-        self.screen.blit(self.cia_agent.image, self.cia_agent.rect)
+        self.screen.blit(self.sully_image, (300, 300))
 
     def run(self, choice):
         player = self.player
@@ -294,32 +295,30 @@ class Chapter_7:
                         text_state = 9
                         text_timer_start = pygame.time.get_ticks()
                 elif selected_option == 2:
-                    run_bad_ending(screen)
                     pygame.quit()
                     sys.exit()
             
             elif text_state == 9:
-                display_text(screen, "You're first instinct is to say your home planet, but really waht you want is to go eat dinner with Sally and her family.", (255, 255, 255), 50, screen.get_height() - 100)
+                display_text(screen, "You're first instinct is to say your home planet, but really what you want is to go eat dinner with Sally and her family.", (255, 255, 255), 30, screen.get_height() - 100)
                 if elapsed_time > 7000:
                     text_state = 10
                     text_timer_start = pygame.time.get_ticks()
 
             elif text_state == 10:
-                display_text(screen, "Sully sighs, 'I wish I could treat you as a foreign creature, but you've treated me with respect...", (255, 255, 255), 50, screen.get_height() - 100)
+                display_text(screen, "Sully sighs, 'I wish I could treat you as a foreign creature, but you've treated me with respect...", (255, 255, 255), 30, screen.get_height() - 100)
                 if elapsed_time > 7000:
                     text_state = 11
                     text_timer_start = pygame.time.get_ticks()
             
             elif text_state == 11: 
-                display_text(screen, "He continues,'I owe you my life, so leave your ship and we won't come after you anymore.'", (255, 255, 255),50, screen.get_height() - 100)
+                display_text(screen, "He continues,'I owe you my life, so leave your ship and we won't come after you anymore.'", (255, 255, 255),30, screen.get_height() - 100)
                 if elapsed_time > 7000:
                     text_state = 12
                     text_timer_start = pygame.time.get_ticks()
 
             elif text_state == 12:
-                display_text(screen, "You've spent your whole journey trying to get your ship back to go home, but now you'd rather go back to Sally's house...", (255, 255, 255), 50, screen.get_height() - 100)
+                display_text(screen, "You've spent your whole journey trying to get your ship back to go home, but now you'd rather go back to Sally's house...", (255, 255, 255), 30, screen.get_height() - 100)
                 if elapsed_time > 7000:
-                    run_good_ending(screen)
                     pygame.quit()
                     sys.exit()
 
@@ -329,10 +328,16 @@ class Chapter_7:
 
 # Initialize the player and NPCs
 good_ending = "good_ending"
-player = Player(pygame.image.load('cute_alien.png').convert_alpha(), 100, 100)
-npc_1 = NPC("detective.png", 100, 200)
-npc_2 = NPC("detective.png", 200, 400)
-npc_3 = NPC("detective.png", 400, 300)
+alien_image = pygame.image.load('alien.jpeg').convert_alpha()
+alien_image = pygame.transform.scale(alien_image, (200, 200))  # Scale the alien image to 100x100 pixels
+player = Player(alien_image, 100, 100)
+
+npc_image = pygame.image.load("npc_agent.jpeg").convert_alpha()  # Load the NPC image
+npc_image = pygame.transform.scale(npc_image, (200, 200))  # Scale the NPC image to 200x200 pixels
+npc_1 = NPC(npc_image, 100, 200)
+npc_2 = NPC(npc_image, 200, 200)  # Create another NPC with the same image
+npc_3 = NPC(npc_image, 300, 200)  # Create a third NPC with the same image
+
 
 # Run Chapter 7
 chapter7 = Chapter_7(player, npc_1, npc_2, npc_3)
