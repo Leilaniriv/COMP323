@@ -10,6 +10,14 @@ class LaserHallway:
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
 
+        pygame.mixer.init()
+
+        self.sounds = {
+            'laser':pygame.mixer.Sound('lasersound.wav'),
+            'hit':pygame.mixer.Sound('hit.wav')
+        }
+        self.sounds['laser'].set_volume(0.3)
+
         self.hallway_bg = pygame.image.load("laserhallway.png").convert_alpha()
         self.hallway_bg = pygame.transform.scale(self.hallway_bg, (width, height))
         
@@ -28,6 +36,9 @@ class LaserHallway:
             pygame.Rect(1050, 100, 15, 300),
         ]
         self.laser_speeds = [4, -4, 5, -5, 4, -5]
+
+        self.sounds['laser'].play(loops=-1)
+
 
         self.exit_zone = pygame.Rect(1100, 0, 100, height)
         self.hit_text = None
@@ -70,6 +81,7 @@ class LaserHallway:
             # Update player animation
             self.player.update()
 
+
             # Laser movement
             for i, laser in enumerate(self.lasers):
                 laser.y += self.laser_speeds[i]
@@ -88,13 +100,14 @@ class LaserHallway:
             # Collision detection
             for laser in self.lasers:
                 if self.player.rect.colliderect(laser):
+                    self.sounds['hit'].play()
                     self.hit_text = font.render("Hit by laser!", True, (255, 255, 255))
                     self.hit_timer = pygame.time.get_ticks()
                     self.player.rect.x, self.player.rect.y = 100, height // 2
                     break
 
             if self.player.rect.colliderect(self.exit_zone):
-                print("Reached desert!")  # replace with scene switch
+                pygame.mixer.stop() # replace with scene switch
                 return("desert")
 
             # Show "hit" text
@@ -105,3 +118,4 @@ class LaserHallway:
 
             pygame.display.flip()
             self.clock.tick(60)
+            

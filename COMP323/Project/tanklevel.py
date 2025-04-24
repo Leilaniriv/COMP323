@@ -8,10 +8,18 @@ from keypad import KeypadGame
 
 class LevelTank:
     def __init__(self, player):
+        pygame.mixer.init()
         self.player = player
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
         
+        self.sounds = {
+            'tank':pygame.mixer.Sound('tanklevel.wav'),
+            'broken':pygame.mixer.Sound('broken.wav')
+            
+        }
+        self.sounds['tank'].set_volume(0.3)
+        self.sounds['tank'].play(loops=-1)
 
         # Load backgrounds
         self.intact_bg = pygame.image.load("lab_background.png").convert_alpha()
@@ -149,8 +157,10 @@ class LevelTank:
                     self.hold_start = pygame.time.get_ticks()
                 elif pygame.time.get_ticks() - self.hold_start >= self.hold_required:
                     self.is_broken = True
+                    self.sounds['broken'].play()
             else:
                 self.hold_start = None
+
 
         pygame.display.update()
         self.clock.tick(60)
@@ -162,6 +172,7 @@ class LevelTank:
                     pygame.quit()
                     exit()
             self.update()
+        pygame.mixer.stop()
         if self.done:
             hallway = LaserHallway(self.player)
             next_scene = hallway.run()

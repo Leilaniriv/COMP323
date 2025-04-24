@@ -7,10 +7,17 @@ from balloon_pop import *
 
 class Carnival:
     def __init__(self,player):
-        pygame.init()
+        pygame.mixer.init()
         self.player = player
         self.screen = pygame.display.set_mode((width,height))
         self.clock = pygame.time.Clock()
+
+        self.sounds = {
+        'carnival':pygame.mixer.Sound('carnival.wav')
+        }
+
+        self.sounds['carnival'].set_volume(0.3)
+        self.sounds['carnival'].play(loops=-1)
 
 
     def carnival_scene(self):
