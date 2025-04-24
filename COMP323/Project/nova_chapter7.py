@@ -328,9 +328,9 @@ class Chapter_7:
 
 # Initialize the player and NPCs
 good_ending = "good_ending"
-alien_image = pygame.image.load('alien.jpeg').convert_alpha()
-alien_image = pygame.transform.scale(alien_image, (200, 200))  # Scale the alien image to 100x100 pixels
-player = Player(alien_image, 100, 100)
+from nova_game import Player
+player = Player()
+player.rect.center = (100, 100)
 
 npc_image = pygame.image.load("npc_agent.jpeg").convert_alpha()  # Load the NPC image
 npc_image = pygame.transform.scale(npc_image, (200, 200))  # Scale the NPC image to 200x200 pixels

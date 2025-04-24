@@ -15,6 +15,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.centery = y
         self.speed_x = 0
         self.speed_y = 0
+        self.sounds = {
+        'church':pygame.mixer.Sound('church.wav')
+        }
+
+        self.sounds['church'].set_volume(0.3)
+        self.sounds['church'].play(loops=-1)
 
     def update(self):
         self.speed_x = 0
@@ -49,9 +55,9 @@ class NPC(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-alien_image = pygame.image.load('alien.jpeg').convert_alpha()
-alien_image = pygame.transform.scale(alien_image, (200, 200))  # Scale the alien image to 200x200 pixels
-player = Player(alien_image, 100, 100)
+from nova_game import Player
+player = Player() 
+player.rect.center = (100, 100)
 priest_image = pygame.image.load('priest.jpeg').convert_alpha()
 priest_image = pygame.transform.scale(priest_image, (200, 200))  # Scale the priest image to 200x200 pixels
 priest = NPC(priest_image, 500, 300)  # Position priest at (300, 300)
@@ -78,7 +84,7 @@ def load_images():
     background_img = pygame.image.load('church_background.jpeg').convert_alpha()
     # Scale the background to fit the screen dimensions
     background_img = pygame.transform.scale(background_img, (width, height))
-    alien_img = pygame.image.load('cute_alien.png').convert_alpha()
+    alien_img = pygame.image.load('aliens.png').convert_alpha()
 
 def display_text(screen, text, color, x, y):
     font = pygame.font.Font(None, 36)
@@ -99,6 +105,7 @@ def display_church():
 
 def run_chapter5(screen):
     load_images()
+
     running = True
     clock = pygame.time.Clock()
     show_priest = False  # State to control when to display the priest
@@ -115,6 +122,7 @@ def run_chapter5(screen):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     print("Escape key pressed. Exiting game...")
+                    pygame.mixer.stop()
                     pygame.quit()
                     sys.exit()
 

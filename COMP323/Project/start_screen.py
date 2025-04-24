@@ -84,17 +84,18 @@ class Game:
             self.clock.tick(60)
 
     def game_loop(self):
-        run_prologue(self.screen)
-        tanklevel = LevelTank(player)
-        tanklevel.run()
+        #run_prologue(self.screen)
+        #tanklevel = LevelTank(player)
+        #tanklevel.run()
 
-        laserhallway = LaserHallway(player)
-        laserhallway.run()
+        #laserhallway = LaserHallway(player)
+        #laserhallway.run()
 
-        run_desert_text(self.screen)
+        #run_desert_text(self.screen)
 
         desert = Desert(player)
         desert.run()
+
 
 
 

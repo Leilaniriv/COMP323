@@ -3,6 +3,7 @@ from spritesheet import *
 from carnival import *
 import sys
 from nova_game import player
+from SpaceShip import SpaceshipPart
 
 
 class Desert:
@@ -11,6 +12,14 @@ class Desert:
         self.player = player
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
+
+        self.spaceship_part = SpaceshipPart(width//2, height//2, 1)
+        self.show_prompt = False
+        self.prompt_timer = 0
+        self.prompt_font = pygame.font.Font('ByteBounce.ttf', 32)
+
+
+        
 
     def carnival_prompt(self):
         mouse = pygame.mouse.get_pos()
@@ -54,13 +63,17 @@ class Desert:
         background = pygame.image.load('desert_background.jpeg').convert_alpha()
         background = pygame.transform.scale(background,(1200,750))
 
+        font = pygame.font.Font(None, 24)
+        for i in range(4):
+            color = (0, 255, 0) if self.player.collected_parts[i] else (255, 0, 0)
+            text = font.render("Part 1", True, color)
+            self.screen.blit(text, (10, 10 + i*30))
+
         carnival_sign = pygame.image.load('carnival_sign.png').convert_alpha()
         carnival_sign = pygame.transform.scale(carnival_sign, (100,120))
 
         font = pygame.font.Font("ByteBounce.ttf", 32)
         sign_instruction = font.render('Click the sign for more information', True, white)
-
-
 
         sign_clicked = False
         show_prompt = False
@@ -71,6 +84,36 @@ class Desert:
 
             self.screen.blit(background, (0,0))
             self.screen.blit(sign_instruction, (width/4 + 50, height/4 + 50))
+            if not self.spaceship_part.collected:
+                self.screen.blit(self.spaceship_part.image, self.spaceship_part.rect)
+                
+                # Check for click
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                    
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 1 and self.spaceship_part.rect.collidepoint(mouse):
+                            self.spaceship_part.collected = True
+                            self.show_prompt = True
+                            self.prompt_timer = pygame.time.get_ticks()
+
+            # Show prompt for 2 seconds
+            if self.show_prompt:
+                prompt_text = self.prompt_font.render("You found a piece of your spaceship!", True, white)
+                text_rect = prompt_text.get_rect(center=(width//2, height//2))
+                
+                # Semi-transparent background for text
+                prompt_bg = pygame.Surface((text_rect.width + 20, text_rect.height + 20), pygame.SRCALPHA)
+                prompt_bg.fill((0, 0, 0, 150))
+                self.screen.blit(prompt_bg, (text_rect.x - 10, text_rect.y - 10))
+                
+                self.screen.blit(prompt_text, text_rect)
+                
+                # Hide after 2 seconds
+                if pygame.time.get_ticks() - self.prompt_timer > 2000:
+                    self.show_prompt = False
+            
 
 
 

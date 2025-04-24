@@ -72,7 +72,7 @@ def load_images():
     #load images for this chapter
     global background_img, alien_img
     background_img = pygame.image.load('town.jpeg').convert_alpha()
-    alien_img = pygame.image.load('cute_alien.png').convert_alpha()
+    alien_img = pygame.image.load('alien.png').convert_alpha()
 
 def display_town_scene(screen):
     screen.fill((0,0,0))

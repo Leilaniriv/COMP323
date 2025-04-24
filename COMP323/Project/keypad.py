@@ -4,8 +4,6 @@ from config import width, height
 class KeypadGame:
     def __init__(self, screen):
         self.screen = screen
-        font = pygame.font.Font('ByteBounce.ttf',32)
-        text = font.render("Memorize the digits!", True, (255, 255, 255))
         self.clock = pygame.time.Clock()
         self.sequence = ['5', '3', '8', '6']
         self.images = [
@@ -27,8 +25,10 @@ class KeypadGame:
 
     def flash_sequence(self):
         for img in self.images:
-            self.screen.fill((0, 0, 0))
+            font = pygame.font.Font('ByteBounce.ttf', 32)
+            memorize = font.render("Memorize the digits!", True, (255, 255, 255))
             self.screen.blit(img, (width // 2 - 200, height // 2 - 200))
+            self.screen.blit(memorize, (width // 2 - memorize.get_width() // 2, height // 2 - 250))  # above the keypad
             pygame.display.update()
             pygame.time.delay(500)  # show image
             self.screen.fill((0, 0, 0))
@@ -76,4 +76,4 @@ class KeypadGame:
                 self.screen.blit(text, (width // 2 - 150, height // 2))
                 pygame.display.update()
                 pygame.time.delay(2000)
-                pygame.mixer.stop() 
+                pygame.mixer.stop()

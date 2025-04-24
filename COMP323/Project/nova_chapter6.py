@@ -295,8 +295,8 @@ class Chapter_6:
 agent = NPC(pygame.image.load('sully.jpeg').convert_alpha(), 100, 100)
 agent.image = pygame.transform.scale(agent.image, (200, 200))  # Scale the agent image to 200x200 pixels
 
-alien_image = pygame.image.load('alien.jpeg').convert_alpha()
-alien_image = pygame.transform.scale(alien_image, (200, 200))  # Scale the alien image to 200x200 pixels
-player = Player(alien_image, 100, 100)
+from nova_game import Player
+player = Player()
+player.rect.center = (100, 100)
 chapter6 = Chapter_6(player, agent)
 chapter6.run()

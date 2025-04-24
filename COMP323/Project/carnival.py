@@ -20,6 +20,7 @@ class Carnival:
         self.sounds['carnival'].play(loops=-1)
 
 
+
     def carnival_scene(self):
         tan = (211, 167, 124)
         background = pygame.image.load('carnival.png').convert_alpha()
@@ -81,7 +82,6 @@ class Carnival:
         ticket_prompt = False
 
         ticket_booth = font.render('Cool Costume!', True, white)
-
 
         run = True
         while run:

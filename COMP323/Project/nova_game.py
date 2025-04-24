@@ -28,6 +28,7 @@ from spritesheet import *
 import sys
 from pygame.locals import *
 from config import *
+from SpaceShip import *
 
 
 black = (0,0,0)
@@ -98,6 +99,7 @@ class Player(pygame.sprite.Sprite):
         self.speed_x = 0
         self.speed_y = 0
         
+        self.collected_parts = [False, False, False, False]
 
     def update(self):
         self.speed_x = 0
