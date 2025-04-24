@@ -49,8 +49,12 @@ class NPC(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-player = Player(pygame.image.load('cute_alien.png').convert_alpha(), x=600, y=600)
-priest = NPC(pygame.image.load('priest.png').convert_alpha(), x=width - 500, y=200)
+alien_image = pygame.image.load('alien.jpeg').convert_alpha()
+alien_image = pygame.transform.scale(alien_image, (200, 200))  # Scale the alien image to 200x200 pixels
+player = Player(alien_image, 100, 100)
+priest_image = pygame.image.load('priest.jpeg').convert_alpha()
+priest_image = pygame.transform.scale(priest_image, (200, 200))  # Scale the priest image to 200x200 pixels
+priest = NPC(priest_image, 500, 300)  # Position priest at (300, 300)
 
 def display_options(screen, option1, option2):
     font = pygame.font.Font(None, 36)
