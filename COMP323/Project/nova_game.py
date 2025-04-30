@@ -23,11 +23,10 @@ Game structure:
 -Projectile class: 
 -Level Manager:
 """
-import pygame
+import pygame, os, sys
+#from spritesheet import SpriteSheet
 from spritesheet import *
-import sys
 from pygame.locals import *
-from config import *
 from SpaceShip import *
 
 
@@ -43,6 +42,15 @@ width = 1200
 height = 750
 
 screen = pygame.display.set_mode((width, height))
+
+# game assets
+game_dir = os.path.dirname(__file__)
+# relative path to assets dir
+assets_dir = os.path.join(game_dir, "assets")
+# relative path to image dir
+img_dir = os.path.join(assets_dir, "images")
+# relative path to music and sound effects dir
+snd_dir = os.path.join(assets_dir, "sounds")
 
 TILESIZE = 32
 #15 blocks high, 20 blocks wide represented by B. P represents player
@@ -72,7 +80,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # Load sprite sheet and animation frames
-        sprite = pygame.image.load('aliens.png').convert_alpha()
+        sprite = pygame.image.load(os.path.join(img_dir,'aliens.png')).convert_alpha()
         sprite_sheet = SpriteSheet(sprite)
 
         self.an_list = []

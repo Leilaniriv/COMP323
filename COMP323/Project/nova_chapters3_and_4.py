@@ -1,7 +1,7 @@
 #chapters 3 and 4
 import pygame
 import sys
-from config import white, width, height
+from nova_game import *
 
 pygame.init()
 screen = pygame.display.set_mode((width, height))
@@ -13,19 +13,19 @@ if pygame.event.get(pygame.QUIT):
 
 def load_images():
     global town_img, home_img, meet_sally_img, meet_grandma_img, sully_appears_img, in_town_img, sully_appears_again_img
-    town_img = pygame.image.load('town.jpeg').convert_alpha()
+    town_img = pygame.image.load(os.path.join(img_dir,'town.jpeg')).convert_alpha()
     town_img = pygame.transform.scale(town_img, (width, height))  # Scale to fit the screen
-    home_img = pygame.image.load('home_background.jpeg').convert_alpha()
+    home_img = pygame.image.load(os.path.join(img_dir,'home_background.jpeg')).convert_alpha()
     home_img = pygame.transform.scale(home_img, (width, height))  # Scale to fit the screen
-    meet_sally_img = pygame.image.load('meet_sally_bg.jpeg').convert_alpha()
+    meet_sally_img = pygame.image.load(os.path.join(img_dir,'meet_sally_bg.jpeg')).convert_alpha()
     meet_sally_img = pygame.transform.scale(meet_sally_img, (width, height))  # Scale to fit the screen
-    meet_grandma_img = pygame.image.load('granny.jpeg').convert_alpha()
+    meet_grandma_img = pygame.image.load(os.path.join(img_dir,'granny.jpeg')).convert_alpha()
     meet_grandma_img = pygame.transform.scale(meet_grandma_img, (width, height))  # Scale to fit the screen
-    sully_appears_img = pygame.image.load('sully_appears.jpeg').convert_alpha()
+    sully_appears_img = pygame.image.load(os.path.join(img_dir,'sully_appears.jpeg')).convert_alpha()
     sully_appears_img = pygame.transform.scale(sully_appears_img, (width, height))  # Scale to fit the screen
-    in_town_img = pygame.image.load('town_with_no_Sully.jpeg').convert_alpha()
+    in_town_img = pygame.image.load(os.path.join(img_dir,'town_with_no_Sully.jpeg')).convert_alpha()
     in_town_img = pygame.transform.scale(in_town_img, (width, height))  # Scale to fit the screen
-    sully_appears_again_img = pygame.image.load('town_with_sully.jpeg').convert_alpha()
+    sully_appears_again_img = pygame.image.load(os.path.join(img_dir,'town_with_sully.jpeg')).convert_alpha()
     sully_appears_again_img = pygame.transform.scale(sully_appears_again_img, (width, height))  # Scale to fit the screen
 
 

@@ -1,6 +1,6 @@
 import pygame
 import sys
-from config import white, width, height
+from nova_game import *
 
 class SpaceshipPart(pygame.sprite.Sprite):
     def __init__(self, x, y, part_type):

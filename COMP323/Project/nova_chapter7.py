@@ -3,8 +3,7 @@
 import pygame
 import sys
 import random  # Import random for generating random positions
-from config import width, height
-from config import *
+from nova_game import *
 
 
 pygame.init()
@@ -150,10 +149,10 @@ class Chapter_7:
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
 
-        self.lab_bg = pygame.image.load("lab_background.png").convert_alpha()
+        self.lab_bg = pygame.image.load(os.path.join(img_dir,"lab_background.png")).convert_alpha()
         self.lab_bg = pygame.transform.scale(self.lab_bg, (width, height))
 
-        self.sully_image = pygame.image.load('sully.jpeg').convert_alpha()
+        self.sully_image = pygame.image.load(os.path.join(img_dir,'sully.jpeg')).convert_alpha()
         self.sully_image = pygame.transform.scale(self.sully_image, (200, 200))  
         
     
@@ -332,7 +331,7 @@ from nova_game import Player
 player = Player()
 player.rect.center = (100, 100)
 
-npc_image = pygame.image.load("npc_agent.jpeg").convert_alpha()  # Load the NPC image
+npc_image = pygame.image.load(os.path.join(img_dir,"npc_agent.jpeg")).convert_alpha()  # Load the NPC image
 npc_image = pygame.transform.scale(npc_image, (200, 200))  # Scale the NPC image to 200x200 pixels
 npc_1 = NPC(npc_image, 100, 200)
 npc_2 = NPC(npc_image, 200, 200)  # Create another NPC with the same image

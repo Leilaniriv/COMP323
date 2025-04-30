@@ -1,22 +1,22 @@
 #epilogue 
 import pygame
 import sys
-from config import white, width, height
+from nova_game import *
 
 screen = pygame.display.set_mode((width, height))
 pygame.init()
 
 def load_images():
     global earth1, earth2, earth3, home, end_screen
-    earth1 = pygame.image.load('bad_ending1.jpeg').convert_alpha()
+    earth1 = pygame.image.load(os.path.join(img_dir,'bad_ending1.jpeg')).convert_alpha()
     earth1 = pygame.transform.scale(earth1, (width, height))
-    earth2 = pygame.image.load('bad_ending2.jpeg').convert_alpha()
+    earth2 = pygame.image.load(os.path.join(img_dir,'bad_ending2.jpeg')).convert_alpha()
     earth2 = pygame.transform.scale(earth2, (width, height))
-    earth3 = pygame.image.load('bad_ending3.jpeg').convert_alpha()
+    earth3 = pygame.image.load(os.path.join(img_dir,'bad_ending3.jpeg')).convert_alpha()
     earth3 = pygame.transform.scale(earth3, (width, height))
-    home = pygame.image.load('good_ending.jpeg').convert_alpha()
+    home = pygame.image.load(os.path.join(img_dir,'good_ending.jpeg')).convert_alpha()
     home = pygame.transform.scale(home, (width, height))
-    end_screen = pygame.image.load('nightsky.jpg').convert_alpha()
+    end_screen = pygame.image.load(os.path.join(img_dir,'nightsky.jpg')).convert_alpha()
 
 def display_text(screen, text, color, x, y):
     font = pygame.font.Font(None, 36)

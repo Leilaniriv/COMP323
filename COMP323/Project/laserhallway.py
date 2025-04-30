@@ -1,7 +1,6 @@
-import pygame
-import sys
+import pygame, os, sys
 from spritesheet import *
-from config import width, height, black, white
+from nova_game import *
 
 class LaserHallway:
     def __init__(self, player):
@@ -13,12 +12,12 @@ class LaserHallway:
         pygame.mixer.init()
 
         self.sounds = {
-            'laser':pygame.mixer.Sound('lasersound.wav'),
-            'hit':pygame.mixer.Sound('hit.wav')
+            'laser':pygame.mixer.Sound(os.path.join(snd_dir, 'lasersound.wav')),
+            'hit':pygame.mixer.Sound(os.path.join(snd_dir, 'hit.wav'))
         }
         self.sounds['laser'].set_volume(0.3)
 
-        self.hallway_bg = pygame.image.load("laserhallway.png").convert_alpha()
+        self.hallway_bg = pygame.image.load(os.path.join(img_dir, "laserhallway.png")).convert_alpha()
         self.hallway_bg = pygame.transform.scale(self.hallway_bg, (width, height))
         
         self.player.rect.x = 100

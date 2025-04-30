@@ -1,7 +1,7 @@
 #chapter 4
 import pygame
 import sys
-from config import white, width, height
+from nova_game import *
 
 
 pygame.init()
@@ -65,14 +65,14 @@ class NPC(pygame.sprite.Sprite):
 
 
 # Initialize Player and NPC objects
-player = Player(pygame.image.load('cute_alien.png').convert_alpha(), x=100, y=100)
+player = Player(pygame.image.load(os.path.join(img_dir,'cute_alien.png')).convert_alpha(), x=100, y=100)
 npc = NPC(300, 200)
 
 def load_images():
     #load images for this chapter
     global background_img, alien_img
-    background_img = pygame.image.load('town.jpeg').convert_alpha()
-    alien_img = pygame.image.load('alien.png').convert_alpha()
+    background_img = pygame.image.load(os.path.join(img_dir,'town.jpeg')).convert_alpha()
+    alien_img = pygame.image.load(os.path.join(img_dir,'alien.png')).convert_alpha()
 
 def display_town_scene(screen):
     screen.fill((0,0,0))

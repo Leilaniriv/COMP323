@@ -1,5 +1,5 @@
 import pygame
-from config import width, height, black, white
+from nova_game import *
 from spritesheet import SpriteSheet
 from laserhallway import LaserHallway
 from keypad import KeypadGame
@@ -14,21 +14,21 @@ class LevelTank:
         self.clock = pygame.time.Clock()
         
         self.sounds = {
-            'tank':pygame.mixer.Sound('tanklevel.wav'),
-            'broken':pygame.mixer.Sound('broken.wav')
+            'tank':pygame.mixer.Sound(os.path.join(snd_dir,'tanklevel.wav')),
+            'broken':pygame.mixer.Sound(os.path.join(snd_dir,'broken.wav'))
             
         }
         self.sounds['tank'].set_volume(0.3)
         self.sounds['tank'].play(loops=-1)
 
         # Load backgrounds
-        self.intact_bg = pygame.image.load("lab_background.png").convert_alpha()
-        self.broken_bg = pygame.image.load("broken_tank.png").convert_alpha()
+        self.intact_bg = pygame.image.load(os.path.join(img_dir,"lab_background.png")).convert_alpha()
+        self.broken_bg = pygame.image.load(os.path.join(img_dir,"broken_tank.png")).convert_alpha()
         self.intact_bg = pygame.transform.scale(self.intact_bg, (width, height))
         self.broken_bg = pygame.transform.scale(self.broken_bg, (width, height))
 
 
-        sprite = pygame.image.load('aliens.png').convert_alpha()
+        sprite = pygame.image.load(os.path.join(img_dir,'aliens.png')).convert_alpha()
         sprite_sheet = SpriteSheet(sprite)
 
         # Animation setup

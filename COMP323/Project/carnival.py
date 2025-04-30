@@ -1,8 +1,7 @@
 import pygame
 import sys
 from spritesheet import *
-from config import*
-from nova_game import Player
+from nova_game import *
 from balloon_pop import *
 
 class Carnival:
@@ -13,7 +12,7 @@ class Carnival:
         self.clock = pygame.time.Clock()
 
         self.sounds = {
-        'carnival':pygame.mixer.Sound('carnival.wav')
+        'carnival':pygame.mixer.Sound(os.path.join(snd_dir, 'carnival.wav'))
         }
 
         self.sounds['carnival'].set_volume(0.3)
@@ -22,7 +21,7 @@ class Carnival:
 
     def carnival_scene(self):
         tan = (211, 167, 124)
-        background = pygame.image.load('carnival.png').convert_alpha()
+        background = pygame.image.load(os.path.join(img_dir, 'carnival.png')).convert_alpha()
         background = pygame.transform.scale(background,(1200,750))
 
         font = pygame.font.Font('freesansbold.ttf', 18)

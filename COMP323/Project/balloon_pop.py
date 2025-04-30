@@ -1,8 +1,7 @@
 import pygame
 import sys
-from config import *
+from nova_game import *
 from spritesheet import *
-import math
 
 balloons = []
 noBalloon = 10
@@ -58,13 +57,13 @@ class BalloonGame:
 
         """Main game loop"""
         #load background
-        background = pygame.image.load('balloonpopbg.png').convert_alpha()
+        background = pygame.image.load(os.path.join(img_dir,'balloonpopbg.png')).convert_alpha()
         background = pygame.transform.scale(background, (1200, 750))
         
 
         #load sprite sheets
-        balloon_spritesheet = SpriteSheet(pygame.image.load('balloonline.png').convert_alpha())
-        pop_spritesheet = SpriteSheet(pygame.image.load('popAnimation.png').convert_alpha())
+        balloon_spritesheet = SpriteSheet(pygame.image.load(os.path.join(img_dir, 'balloonline.png')).convert_alpha())
+        pop_spritesheet = SpriteSheet(pygame.image.load(os.path.join(img_dir, 'popAnimation.png')).convert_alpha())
 
 
         #balloon sprites

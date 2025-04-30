@@ -1,5 +1,5 @@
 import pygame
-from config import *
+#from nova_game import *
 #from start_screen import *
 
 class SpriteSheet():
@@ -16,7 +16,7 @@ class SpriteSheet():
 
         return image
 
-
+'''
 class Block(pygame.sprite.Sprite): #tile map
     def __init__(self, game, x, y):
         self.game = game
@@ -35,3 +35,4 @@ class Block(pygame.sprite.Sprite): #tile map
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
+'''

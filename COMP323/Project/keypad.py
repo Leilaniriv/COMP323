@@ -1,5 +1,5 @@
 import pygame
-from config import width, height
+from nova_game import *
 
 class KeypadGame:
     def __init__(self, screen):
@@ -7,17 +7,17 @@ class KeypadGame:
         self.clock = pygame.time.Clock()
         self.sequence = ['5', '3', '8', '6']
         self.images = [
-            pygame.image.load("keypad.png").convert_alpha(), # blank
-            pygame.image.load("keypad1.png").convert_alpha(),  # 5
-            pygame.image.load("keypad2.png").convert_alpha(),  # 3
-            pygame.image.load("keypad3.png").convert_alpha(),  # 8
-            pygame.image.load("keypad4.png").convert_alpha(),  # 6
+            pygame.image.load(os.path.join(img_dir, "keypad.png")).convert_alpha(), # blank
+            pygame.image.load(os.path.join(img_dir, "keypad1.png")).convert_alpha(),  # 5
+            pygame.image.load(os.path.join(img_dir, "keypad2.png")).convert_alpha(),  # 3
+            pygame.image.load(os.path.join(img_dir, "keypad3.png")).convert_alpha(),  # 8
+            pygame.image.load(os.path.join(img_dir, "keypad4.png")).convert_alpha(),  # 6
         ]
         self.images = [pygame.transform.scale(img, (400, 400)) for img in self.images]
 
         self.sounds = {
-        'keypad':pygame.mixer.Sound('keypad.wav'),
-        'beep':pygame.mixer.Sound('beep.mp3')
+        'keypad':pygame.mixer.Sound(os.path.join(snd_dir, 'keypad.wav')),
+        'beep':pygame.mixer.Sound(os.path.join(snd_dir, 'beep.mp3'))
         }
         self.sounds['keypad'].set_volume(0.3)
         self.sounds['keypad'].play(loops=-1)

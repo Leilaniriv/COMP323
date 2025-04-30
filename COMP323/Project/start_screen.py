@@ -2,7 +2,7 @@ import pygame
 from spritesheet import *
 import sys
 from pygame.locals import *
-from config import *
+from nova_game import *
 from desert import *
 from desert import run_desert_text
 from laserhallway import *
@@ -43,7 +43,7 @@ class Game:
 
         running = True
         while running:
-            bg_image = pygame.image.load('nightsky.jpg').convert_alpha()
+            bg_image = pygame.image.load(os.path.join(img_dir,'nightsky.jpg')).convert_alpha()
             bg_image = pygame.transform.scale(bg_image,(1200,750))
             bg_rect = bg_image.get_rect()
             self.screen.blit(bg_image, bg_rect)

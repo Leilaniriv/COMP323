@@ -1,15 +1,15 @@
 import pygame
 import sys
-from config import white, width, height
+from nova_game import *
 
 
 def load_images():
     # Load images for each scene
     global crash_img, alien_img, vehicle_img, tank_img
-    crash_img = pygame.image.load('crash_img.png').convert_alpha()
-    alien_img = pygame.image.load('alien_img.png').convert_alpha()
-    vehicle_img = pygame.image.load('vehicle_img.png').convert_alpha()
-    tank_img = pygame.image.load('tank_img.png').convert_alpha()
+    crash_img = pygame.image.load(os.path.join(img_dir,'crash_img.png')).convert_alpha()
+    alien_img = pygame.image.load(os.path.join(img_dir,'alien_img.png')).convert_alpha()
+    vehicle_img = pygame.image.load(os.path.join(img_dir,'vehicle_img.png')).convert_alpha()
+    tank_img = pygame.image.load(os.path.join(img_dir,'tank_img.png')).convert_alpha()
 
 def display_crash_landing(screen):
     screen.fill((0, 0, 0)) 

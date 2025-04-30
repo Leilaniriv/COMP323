@@ -1,7 +1,7 @@
 #chapter 5
 import pygame
 import sys
-from config import width, height
+from nova_game import *
 
 pygame.init()
 screen = pygame.display.set_mode((width, height))  # Initialize the display
@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.speed_x = 0
         self.speed_y = 0
         self.sounds = {
-        'church':pygame.mixer.Sound('church.wav')
+        'church':pygame.mixer.Sound(os.path.join(snd_dir,'church.wav'))
         }
 
         self.sounds['church'].set_volume(0.3)
@@ -58,7 +58,7 @@ class NPC(pygame.sprite.Sprite):
 from nova_game import Player
 player = Player() 
 player.rect.center = (100, 100)
-priest_image = pygame.image.load('priest.jpeg').convert_alpha()
+priest_image = pygame.image.load(os.path.join(img_dir,'priest.jpeg')).convert_alpha()
 priest_image = pygame.transform.scale(priest_image, (200, 200))  # Scale the priest image to 200x200 pixels
 priest = NPC(priest_image, 500, 300)  # Position priest at (300, 300)
 
@@ -81,10 +81,10 @@ def choose_option():
 
 def load_images():
     global background_img, alien_img
-    background_img = pygame.image.load('church_background.jpeg').convert_alpha()
+    background_img = pygame.image.load(os.path.join(img_dir,'church_background.jpeg')).convert_alpha()
     # Scale the background to fit the screen dimensions
     background_img = pygame.transform.scale(background_img, (width, height))
-    alien_img = pygame.image.load('aliens.png').convert_alpha()
+    alien_img = pygame.image.load(os.path.join(img_dir,'aliens.png')).convert_alpha()
 
 def display_text(screen, text, color, x, y):
     font = pygame.font.Font(None, 36)

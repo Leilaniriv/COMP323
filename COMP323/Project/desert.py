@@ -2,7 +2,7 @@ import pygame
 from spritesheet import *
 from carnival import *
 import sys
-from nova_game import player
+from nova_game import *
 from SpaceShip import SpaceshipPart
 
 
@@ -60,7 +60,7 @@ class Desert:
 
 
     def desertescape(self):
-        background = pygame.image.load('desert_background.jpeg').convert_alpha()
+        background = pygame.image.load(os.path.join(img_dir, 'desert_background.jpeg')).convert_alpha()
         background = pygame.transform.scale(background,(1200,750))
 
         font = pygame.font.Font(None, 24)
@@ -69,7 +69,7 @@ class Desert:
             text = font.render("Part 1", True, color)
             self.screen.blit(text, (10, 10 + i*30))
 
-        carnival_sign = pygame.image.load('carnival_sign.png').convert_alpha()
+        carnival_sign = pygame.image.load(os.path.join(img_dir, 'carnival_sign.png')).convert_alpha()
         carnival_sign = pygame.transform.scale(carnival_sign, (100,120))
 
         font = pygame.font.Font("ByteBounce.ttf", 32)

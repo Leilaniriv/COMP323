@@ -2,9 +2,8 @@
 import pygame
 import sys
 import random  # Import random for random movement
-from config import width, height
 from spritesheet import SpriteSheet
-from config import width, height
+from nova_game import *
 
 pygame.init()
 screen = pygame.display.set_mode((width, height))  # Initialize the display
@@ -137,7 +136,7 @@ class Chapter_6:
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
 
-        self.desert_bg = pygame.image.load("desert_background.jpeg").convert_alpha()
+        self.desert_bg = pygame.image.load(os.path.join(img_dir,"desert_background.jpeg")).convert_alpha()
         self.desert_bg = pygame.transform.scale(self.desert_bg, (width, height))
 
    
@@ -292,7 +291,7 @@ class Chapter_6:
             self.clock.tick(60)
 
 
-agent = NPC(pygame.image.load('sully.jpeg').convert_alpha(), 100, 100)
+agent = NPC(pygame.image.load(os.path.join(img_dir,'sully.jpeg')).convert_alpha(), 100, 100)
 agent.image = pygame.transform.scale(agent.image, (200, 200))  # Scale the agent image to 200x200 pixels
 
 from nova_game import Player
