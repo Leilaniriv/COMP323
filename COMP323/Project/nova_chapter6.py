@@ -291,11 +291,4 @@ class Chapter_6:
             self.clock.tick(60)
 
 
-agent = NPC(pygame.image.load(os.path.join(img_dir,'sully.jpeg')).convert_alpha(), 100, 100)
-agent.image = pygame.transform.scale(agent.image, (200, 200))  # Scale the agent image to 200x200 pixels
 
-from nova_game import Player
-player = Player()
-player.rect.center = (100, 100)
-chapter6 = Chapter_6(player, agent)
-chapter6.run()

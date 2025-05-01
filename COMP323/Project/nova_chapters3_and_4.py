@@ -2,9 +2,12 @@
 import pygame
 import sys
 from nova_game import *
+from nova_chapter5 import run_chapter5
 
 pygame.init()
 screen = pygame.display.set_mode((width, height))
+exit_zone = pygame.Rect(1100, 0, 100, height)
+
 
 
 if pygame.event.get(pygame.QUIT):
@@ -139,7 +142,8 @@ def run_chapter3_4(screen):
     distraction(screen)
     pygame.display.update()
     pygame.time.wait(3000)
+    pygame.draw.rect(screen, (0, 0, 255), exit_zone)  # Draw the blue rectangle
 
-run_chapter3_4(screen)
+
 
 

@@ -3,8 +3,7 @@
 import pygame
 import sys
 import random  # Import random for generating random positions
-from config import width, height
-from config import *
+from nova_game import *
 
 
 pygame.init()
@@ -150,11 +149,11 @@ class Chapter_7:
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
 
-        self.lab_bg = pygame.image.load("lab_background.png").convert_alpha()
+        self.lab_bg = pygame.image.load("/COMP323/Project/assets/lab_background.png").convert_alpha()
         self.lab_bg = pygame.transform.scale(self.lab_bg, (width, height))
 
-        self.sully_image = pygame.image.load('sully.jpeg').convert_alpha()
-        self.sully_image = pygame.transform.scale(self.sully_image, (200, 200))  
+        self.sully_image = pygame.image.load('/COMP323/Project/assets/sully.jpeg').convert_alpha()
+        self.sully_image = pygame.transform.scale(self.sully_image, (200, 200))
         
     
     def display_agents(self, npc_1, npc_2, npc_3):

@@ -73,7 +73,8 @@ tilemap = [
     'B.................B',
     'BBBBBBBBBBBBBBBBBBBB'
 ]
-
+game_sprites = pygame.sprite.Group()
+projectiles = pygame.sprite.Group()
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -82,7 +83,7 @@ class Player(pygame.sprite.Sprite):
         # Load sprite sheet and animation frames
         sprite = pygame.image.load(os.path.join(img_dir,'aliens.png')).convert_alpha()
         sprite_sheet = SpriteSheet(sprite)
-
+        
         self.an_list = []
         an_steps = [10, 10]  # Right, Left
         step_counter = 0
@@ -171,6 +172,21 @@ class Player(pygame.sprite.Sprite):
             self.rect.top = 0
         if self.rect.bottom > height:
             self.rect.bottom = height
+    def fire(self):
+        # Fire projectiles with a cooldown
+        current_time = pygame.time.get_ticks()
+        if hasattr(self, 'last_fired') and current_time - self.last_fired >= self.fire_cooldown:
+            projectile = Projectile(self.rect.right, self.rect.centery)
+            game_sprites.add(projectile)
+            projectiles.add(projectile)
+            self.last_fired = current_time
+        elif not hasattr(self, 'last_fired'):
+            self.last_fired = current_time
+            self.fire_cooldown = 500
+            projectile = Projectile(self.rect.right, self.rect.centery)
+            game_sprites.add(projectile)
+            projectiles.add(projectile)
+
 
 
 class Block(pygame.sprite.Sprite): #tile map
@@ -197,7 +213,7 @@ class Projectile(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((5,10))
-        self.image.fill(255, 0, 0)
+        self.image.fill((255, 0, 0))
         self.rect = self.image.get_rect()
         #weapon fired from front (top) of player sprite...
         self.rect.bottom = y
@@ -212,6 +228,7 @@ class Projectile(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill()
 
+            
 class NPC(pygame.sprite.Sprite):
 
     def __init__(self, x, y):

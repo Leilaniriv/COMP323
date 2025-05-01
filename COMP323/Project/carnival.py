@@ -3,6 +3,7 @@ import sys
 from spritesheet import *
 from nova_game import *
 from balloon_pop import *
+from nova_chapters3_and_4 import *
 
 class Carnival:
     def __init__(self,player):
@@ -17,6 +18,9 @@ class Carnival:
 
         self.sounds['carnival'].set_volume(0.3)
         self.sounds['carnival'].play(loops=-1)
+
+        self.exit_zone = pygame.Rect(1100, 0, 100, height)
+
 
 
     def carnival_scene(self):
@@ -44,6 +48,7 @@ class Carnival:
         pretzel_vendor_sign = font.render('PRETZELS', True, black)
         balloon_pop_sign = smaller_font.render('BALLOON POP', True, black)
         ticket_both_sign = smaller_font.render('TICKET BOOTH', True, black)
+        direction_booth_sign = smaller_font.render('DIRECTIONS', True, black)
 
         sign_text = [pretzel_vendor_sign, balloon_pop_sign, ticket_both_sign]
 
@@ -52,7 +57,7 @@ class Carnival:
         booth2 = pygame.Rect(width/4 - 245, height / 2 + 34, 110, 80) #balloon
         booth3 = pygame.Rect(width/2 - 50, height / 4 - 4, 110, 80) #pretzel
         booth4 = pygame.Rect(width/3 + 15, height / 2 + 156, 110, 80) #ticket
-        booth5 = pygame.Rect(width/2 + 60, height / 2 + 35, 110, 80)
+        booth5 = pygame.Rect(width/2 + 60, height / 2 + 35, 110, 80) #directions
         booth6 = pygame.Rect(width/2 + 415, height / 2 + 156, 110, 80)
         booth7 = pygame.Rect(width/2 + 540, height / 4 - 4, 60, 80)
 
@@ -104,6 +109,15 @@ class Carnival:
 
         slider_win = font.render('Good Job', True, white)
 
+        #booth5
+        booth5_sign_clicked = False
+        booth5_prompt = False
+        booth5_message = font.render('Proceed to the right to exit', True, white)
+        booth5_background = pygame.Rect(width/2 + 40, height/2 + 100, 200, 30)
+
+        # Semi-transparent background for booth5 text
+        booth5_bg = pygame.Surface((booth5_background.width + 20, booth5_background.height + 20), pygame.SRCALPHA)
+        booth5_bg.fill((0, 0, 0, 150))
 
         run = True
         while run:
@@ -111,6 +125,12 @@ class Carnival:
             
             mouse = pygame.mouse.get_pos()
             key_pressed = pygame.key.get_pressed()
+
+
+            if self.player.rect.colliderect(self.exit_zone):
+                pygame.mixer.stop()
+                run_chapter3_4(self.screen)  # Run chapters 3 and 4
+                return "chapter3_4_complete"
 
             if booth1.collidepoint(mouse) and admission_sign_clicked:
                 if admission_prompt:
@@ -144,7 +164,10 @@ class Carnival:
                     self.screen.blit(ticket_bg, (ticket_background.x - 10, ticket_background.y - 10))
                     self.screen.blit(ticket_booth, ticket_background)
                 
-                
+            if booth5.collidepoint(mouse) and booth5_sign_clicked:
+                if booth5_prompt:
+                    self.screen.blit(booth5_bg, (booth5_background.x - 10, booth5_background.y - 10))
+                    self.screen.blit(booth5_message, booth5_background)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -169,6 +192,9 @@ class Carnival:
                         if booth4.collidepoint(mouse):
                             ticket_sign_clicked = True
                             ticket_prompt = True
+                        if booth5.collidepoint(mouse):
+                            booth5_sign_clicked = True
+                            booth5_prompt = True
 
 
             self.player.update()
@@ -182,6 +208,7 @@ class Carnival:
                 self.screen.blit(balloon_pop_sign, (width/4 - 240, height / 2 + 50))
                 self.screen.blit(ticket_both_sign, (width/3 + 15, height / 2 + 172))
                 self.screen.blit(admission_booth_sign, (width/4 - 90, height / 4 - 50))
+                self.screen.blit(direction_booth_sign, (width/2 + 60, height / 2 + 45))
 
             
             '''

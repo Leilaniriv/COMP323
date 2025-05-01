@@ -232,13 +232,11 @@ def run_chapter5(screen):
                     text_state = 13
                     text_timer = 0
             elif text_state == 13:
-                #go to chapter 6 put for now end loop
-                pygame.quit()
-                sys.exit()
+                return
 
         # Update the display
         pygame.display.flip()
         clock.tick(120)
-             
 
-run_chapter5(screen)
+
+#run_chapter5(screen)

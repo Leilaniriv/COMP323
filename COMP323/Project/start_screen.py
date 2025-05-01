@@ -9,7 +9,7 @@ from laserhallway import *
 from prologue import run_prologue
 from carnival import Carnival
 from tanklevel import *
-from nova_game import player
+from nova_game import *
 
 
 
@@ -84,12 +84,12 @@ class Game:
             self.clock.tick(60)
 
     def game_loop(self):
-        run_prologue(self.screen)
-        tanklevel = LevelTank(player)
-        tanklevel.run()
+        #run_prologue(self.screen)
+        #tanklevel = LevelTank(player)
+        #tanklevel.run()
 
-        laserhallway = LaserHallway(player)
-        laserhallway.run()
+        #laserhallway = LaserHallway(player)
+        #laserhallway.run()
 
         run_desert_text(self.screen)
 
@@ -99,11 +99,12 @@ class Game:
 
 
 
+
                         
 
 if __name__ == "__main__":
     game = Game()
     game.Start_screen()
-    game.game_loop
+    game.game_loop()
     pygame.quit()
 
